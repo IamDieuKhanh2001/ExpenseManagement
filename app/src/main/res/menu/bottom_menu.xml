@@ -8,9 +8,9 @@
         android:icon="@drawable/baseline_home_24"/>
 
     <item
-        android:id="@+id/shorts"
-        android:title="Shorts"
-        android:icon="@drawable/baseline_cast_connected_24"
+        android:id="@+id/budget"
+        android:title="Budget"
+        android:icon="@drawable/baseline_currency_yen_24"
         />
 
     <item

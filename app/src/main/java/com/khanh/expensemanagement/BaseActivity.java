@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
+import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
 
 public class BaseActivity extends AppCompatActivity {
@@ -44,8 +44,8 @@ public class BaseActivity extends AppCompatActivity {
 
             if (item.getItemId() == R.id.home) {
                 replaceFragment(new HomeFragment());
-            } else if (item.getItemId() == R.id.shorts) {
-//                replaceFragment(new ShortFragment());
+            } else if (item.getItemId() == R.id.budget) {
+                replaceFragment(new BudgetFragment());
             } else if (item.getItemId() == R.id.subscriptions) {
 //                replaceFragment(new SubscriptionFragment());
             } else if (item.getItemId() == R.id.library) {

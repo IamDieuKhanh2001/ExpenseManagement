@@ -1,4 +1,4 @@
-package com.khanh.expensemanagement;
+package com.khanh.expensemanagement.home;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDate;
+import com.khanh.expensemanagement.R;
+
 import java.util.ArrayList;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
@@ -34,17 +35,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
 
         holder.dayOfMonth.setText(daysOfMonth.get(position));
-//        if (selectedPosition == position) {
-//            holder.calendar_cell_layout.setBackgroundResource(R.drawable.calendar_cell_border);
-//        } else {
-//            holder.calendar_cell_layout.setBackground(null);
-//        }
-//
-//        // Xử lý sự kiện click
-//        holder.itemView.setOnClickListener(v -> {
-//            selectedPosition = position;
-//            notifyDataSetChanged();
-//        });
     }
 
     @Override
