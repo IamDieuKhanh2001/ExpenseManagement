@@ -1,8 +1,8 @@
 package com.khanh.expensemanagement.home;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -20,15 +20,18 @@ import android.widget.Toast;
 
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.util.FragmentUtil;
+import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HomeFragment extends Fragment implements CalendarAdapter.OnItemListener {
 
     private final String FRAGMENT_TITLE = "Home";
+
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
@@ -37,6 +40,10 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private int previousSelectedPosition = -1;
     private TextView transaction_history_title;
     private RecyclerView transaction_recycler_view;
+    DatabaseHelper databaseHelper;
+
+    ArrayList<Integer> totalAmountInDateArray = new ArrayList<>(Collections.nCopies(42, 0));
+
 
     private final ArrayList<TransactionHistory> transactionHistoryList = new ArrayList<>();
 
@@ -47,28 +54,34 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        databaseHelper = new DatabaseHelper(getActivity());
         FragmentUtil.setActionBarTitle(getActivity(), FRAGMENT_TITLE);
 
         initWidgets(view);
         selectedDate = LocalDate.now();
         setMonthView();
-        setTransactionList();
+        getDataTransactionList();
 
         previous_month_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectedDate = selectedDate.minusMonths(1);
+                selectedDate = selectedDate.withDayOfMonth(1);
                 setMonthView();
+                onResume();
             }
         });
         next_month_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectedDate = selectedDate.plusMonths(1);
+                selectedDate = selectedDate.withDayOfMonth(1);
                 setMonthView();
+                onResume();
             }
         });
 
@@ -77,10 +90,11 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
     @Override
     public void onResume() {
+
         super.onResume();
 
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
-        // Add border for current cell day in recyclerView
+        // Add border for selected cell day in recyclerView
         previousSelectedPosition = daysInMonth.indexOf(String.valueOf(selectedDate.getDayOfMonth()));
 
         calendarRecyclerView.post(() -> {
@@ -97,7 +111,47 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         createTransactionHistoryTitle();
     }
 
+    public void getDataAmount() {
+
+        Integer totalAmountInDate = 0;
+
+        LocalDate firstDayOfMonth = selectedDate.withDayOfMonth(1);
+        int dayOfWeek = firstDayOfMonth.getDayOfWeek().getValue();
+
+        LocalDate lastDayOfMonth = selectedDate.withDayOfMonth(selectedDate.lengthOfMonth());
+
+        LocalDate currentDate = firstDayOfMonth;
+        while (!currentDate.isAfter(lastDayOfMonth)) {
+            // Gọi hàm truy vấn với từng ngày
+            Cursor cursor = databaseHelper.transactionFindByDate(currentDate);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    // Lấy dữ liệu từ Cursor
+                    int amountColIndex = cursor.getColumnIndex("amount");
+                    if (amountColIndex != -1) {
+
+                        Integer currentAmount = cursor.getInt(amountColIndex);
+                        totalAmountInDate += currentAmount;
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            // Đóng cursor nếu không còn sử dụng
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            totalAmountInDateArray.set(dayOfWeek + currentDate.getDayOfMonth() - 1, totalAmountInDate);
+            totalAmountInDate = 0;
+
+            // Chuyển sang ngày tiếp theo
+            currentDate = currentDate.plusDays(1);
+        }
+    }
+
     private void initWidgets(View view) {
+
         calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView);
         monthYearText = view.findViewById(R.id.monthYearTV);
         previous_month_btn = view.findViewById(R.id.previous_month_btn);
@@ -107,11 +161,15 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     }
 
     private void setMonthView() {
+
+        totalAmountInDateArray = new ArrayList<>(Collections.nCopies(42, 0));
+        getDataAmount();
+
         monthYearText.setText(monthYearFromDate(selectedDate));
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         // Set data for recyclerView
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, totalAmountInDateArray,this);
 
         // Init DividerItemDecoration for the first time only (The divider between item in recyclerView)
         if (calendarRecyclerView.getItemDecorationCount() == 0) {
@@ -128,6 +186,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     }
 
     private ArrayList<String> daysInMonthArray(LocalDate date) {
+
         ArrayList<String> daysInMonthArray = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(date);
 
@@ -147,6 +206,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     }
 
     private String monthYearFromDate(LocalDate date) {
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         return date.format(formatter);
     }
@@ -161,7 +221,8 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         transaction_history_title.setText(formattedText);
     }
 
-    private void setTransactionList() {
+    private void getDataTransactionList() {
+
         transactionHistoryList.add(new TransactionHistory(1, "Test 1", "cate 1", "999.999.999.999"));
         transactionHistoryList.add(new TransactionHistory(1, "Test 2", "cate 1", "999.999"));
         transactionHistoryList.add(new TransactionHistory(1, "Test 3", "cate 3", "999.999"));
@@ -176,6 +237,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
     @Override
     public void onItemClick(int position, String dayText, View view) {
+
         ConstraintLayout cell_layout;
         if (!dayText.equals("")) {
             if (previousSelectedPosition != position) {

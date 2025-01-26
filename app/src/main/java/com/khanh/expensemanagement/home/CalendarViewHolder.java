@@ -12,12 +12,14 @@ import com.khanh.expensemanagement.R;
 public class CalendarViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
     public final TextView dayOfMonth;
+    public final TextView totalAmount;
     public final ConstraintLayout calendar_cell_layout;
     private final CalendarAdapter.OnItemListener onItemListener;
     public CalendarViewHolder(@NonNull View itemView, CalendarAdapter.OnItemListener onItemListener)
     {
         super(itemView);
         dayOfMonth = itemView.findViewById(R.id.cellDayText);
+        totalAmount = itemView.findViewById(R.id.totalAmountText);
         calendar_cell_layout = itemView.findViewById(R.id.calendar_cell_layout);
         this.onItemListener = onItemListener;
         itemView.setOnClickListener(this);
