@@ -41,39 +41,9 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/source_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_width="100dp"
-            android:layout_height="100dp">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:srcCompat="@drawable/source_of_fund_1" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Fund 11111"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="15dp"/>
-
-        </LinearLayout>
-
-
-
-
-    </LinearLayout>
-
-
-
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>
