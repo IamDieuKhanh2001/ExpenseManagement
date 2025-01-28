@@ -66,25 +66,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         setMonthView();
         getDataTransactionList();
 
-        previous_month_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedDate = selectedDate.minusMonths(1);
-                selectedDate = selectedDate.withDayOfMonth(1);
-                setMonthView();
-                onResume();
-            }
-        });
-        next_month_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedDate = selectedDate.plusMonths(1);
-                selectedDate = selectedDate.withDayOfMonth(1);
-                setMonthView();
-                onResume();
-            }
-        });
-
         return view;
     }
 
@@ -158,6 +139,25 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         next_month_btn = view.findViewById(R.id.next_month_btn);
         transaction_history_title = view.findViewById(R.id.transaction_history_title);
         transaction_recycler_view = view.findViewById(R.id.transaction_recycler_view);
+
+        previous_month_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedDate = selectedDate.minusMonths(1);
+                selectedDate = selectedDate.withDayOfMonth(1);
+                setMonthView();
+                onResume();
+            }
+        });
+        next_month_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedDate = selectedDate.plusMonths(1);
+                selectedDate = selectedDate.withDayOfMonth(1);
+                setMonthView();
+                onResume();
+            }
+        });
     }
 
     private void setMonthView() {
