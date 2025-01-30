@@ -15,10 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.register_trans.Source;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
@@ -40,12 +42,10 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private int previousSelectedPosition = -1;
     private TextView transaction_history_title;
     private RecyclerView transaction_recycler_view;
+    private LinearLayout empty_layout;
     DatabaseHelper databaseHelper;
 
     ArrayList<Integer> totalAmountInDateArray = new ArrayList<>(Collections.nCopies(42, 0));
-
-
-    private final ArrayList<TransactionHistory> transactionHistoryList = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -63,9 +63,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
         initWidgets(view);
         selectedDate = LocalDate.now();
-        setMonthView();
-        getDataTransactionList();
-
         return view;
     }
 
@@ -73,7 +70,8 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     public void onResume() {
 
         super.onResume();
-
+        setMonthView();
+        getDataTransactionList();
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
         // Add border for selected cell day in recyclerView
         previousSelectedPosition = daysInMonth.indexOf(String.valueOf(selectedDate.getDayOfMonth()));
@@ -88,8 +86,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
                 viewById.setBackgroundResource(R.drawable.calendar_cell_border);
             }
         });
-
-        createTransactionHistoryTitle();
     }
 
     public void getDataAmount() {
@@ -108,7 +104,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    // Lấy dữ liệu từ Cursor
                     int amountColIndex = cursor.getColumnIndex("amount");
                     if (amountColIndex != -1) {
 
@@ -139,6 +134,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         next_month_btn = view.findViewById(R.id.next_month_btn);
         transaction_history_title = view.findViewById(R.id.transaction_history_title);
         transaction_recycler_view = view.findViewById(R.id.transaction_recycler_view);
+        empty_layout = view.findViewById(R.id.empty_layout);
 
         previous_month_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,7 +165,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         // Set data for recyclerView
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, totalAmountInDateArray,this);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, totalAmountInDateArray, this);
 
         // Init DividerItemDecoration for the first time only (The divider between item in recyclerView)
         if (calendarRecyclerView.getItemDecorationCount() == 0) {
@@ -223,25 +219,44 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
     private void getDataTransactionList() {
 
-        transactionHistoryList.add(new TransactionHistory(1, "Test 1", "cate 1", "999.999.999.999"));
-        transactionHistoryList.add(new TransactionHistory(1, "Test 2", "cate 1", "999.999"));
-        transactionHistoryList.add(new TransactionHistory(1, "Test 3", "cate 3", "999.999"));
-        transactionHistoryList.add(new TransactionHistory(1, "Test 3", "cate 3", "999.999"));
-        transactionHistoryList.add(new TransactionHistory(1, "Test 3", "cate 3", "999.999"));
-        transactionHistoryList.add(new TransactionHistory(1, "Test 3", "cate 3", "999.999"));
+        ArrayList<TransactionHistory> transactionHistoryList = new ArrayList<>();
+
+        Cursor cursor = databaseHelper.transactionFindByDate(selectedDate);
+        if (cursor != null && cursor.moveToFirst()) {
+
+            do {
+                TransactionHistory transactionHistory = new TransactionHistory();
+                transactionHistory.setTransactionId(cursor.getInt(0));
+                transactionHistory.setTransactionTitle(cursor.getString(2));
+                transactionHistory.setCategoryTitle(cursor.getString(3));
+                transactionHistory.setAmount(cursor.getInt(1));
+                transactionHistoryList.add(transactionHistory);
+            } while (cursor.moveToNext());
+        }
 
         TransactionAdapter transactionAdapter = new TransactionAdapter(requireContext(), getActivity(), transactionHistoryList);
         transaction_recycler_view.setAdapter(transactionAdapter);
         transaction_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (transactionAdapter.getItemCount() == 0) {
+
+            transaction_recycler_view.setVisibility(View.GONE);
+            empty_layout.setVisibility(View.VISIBLE);
+        } else {
+
+            transaction_recycler_view.setVisibility(View.VISIBLE);
+            empty_layout.setVisibility(View.GONE);
+        }
+        createTransactionHistoryTitle();
     }
 
     @Override
     public void onItemClick(int position, String dayText, View view) {
 
         ConstraintLayout cell_layout;
-        if (!dayText.equals("")) {
+        if (!dayText.isEmpty()) {
             if (previousSelectedPosition != position) {
 
+                // Clear last selected date border
                 RecyclerView.ViewHolder viewHolder = calendarRecyclerView.findViewHolderForAdapterPosition(previousSelectedPosition);
                 if (viewHolder != null) {
 
@@ -252,16 +267,12 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
             }
 
             selectedDate = selectedDate.withDayOfMonth(Integer.valueOf(dayText));
-            Log.d("Selectedday", String.valueOf(selectedDate));
-            String message = "Selected Date " + dayText + " " + monthYearFromDate(selectedDate);
-            Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
             cell_layout = view.findViewById(R.id.calendar_cell_layout);
             cell_layout.setBackgroundResource(R.drawable.calendar_cell_border);
+            // display Transaction history
+            getDataTransactionList();
             // set previous position
             previousSelectedPosition = position;
-            // update title
-            createTransactionHistoryTitle();
         }
     }
 }

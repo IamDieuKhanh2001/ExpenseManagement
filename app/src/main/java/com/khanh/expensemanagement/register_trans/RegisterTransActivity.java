@@ -1,12 +1,13 @@
 package com.khanh.expensemanagement.register_trans;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -18,11 +19,12 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.util.DateTimeUtil;
+import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
 import java.util.ArrayList;
 
@@ -37,6 +39,10 @@ public class RegisterTransActivity extends AppCompatActivity {
     EditText note;
     Button add_expense;
     RecyclerView source_recycler_view;
+    DatabaseHelper databaseHelper;
+
+    Integer categorySelectedId;
+    Integer sourceSelectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class RegisterTransActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
         }
+        databaseHelper = new DatabaseHelper(this);
         initWidgets();
     }
 
@@ -90,24 +97,34 @@ public class RegisterTransActivity extends AppCompatActivity {
 
         add_expense = findViewById(R.id.add_expense);
         add_expense.setOnClickListener(view -> {
-
+            databaseHelper.registerTransaction(Integer.valueOf(amount.getText().toString()), note.getText().toString(), categorySelectedId, date.getText().toString(), sourceSelectedId);
+            // Back to home
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
     }
 
     private void getDataSourceList(Dialog dialog) {
 
         ArrayList<Source> sourceList = new ArrayList<>();
-        sourceList.add(new Source(1, "name ss1", "img1"));
-        sourceList.add(new Source(2, "name ss2", "img1"));
-        sourceList.add(new Source(3, "name ss3", "img1"));
+
+        Cursor cursor = databaseHelper.sourceFindAll();
+        if (cursor != null && cursor.moveToFirst()) {
+
+            do {
+                Source source = new Source();
+                source.setId(cursor.getInt(0));
+                source.setNameSs(cursor.getString(1));
+                source.setImage(cursor.getString(2));
+                sourceList.add(source);
+            } while (cursor.moveToNext());
+        }
 
         // Click source item
         SourceAdapter sourceAdapter = new SourceAdapter(RegisterTransActivity.this, RegisterTransActivity.this, sourceList, (position, id, nameSs, view) -> {
             Toast.makeText(this, "Clicked: " + id, Toast.LENGTH_SHORT).show();
-            if (!nameSs.isEmpty()) {
-
-                source.setText(nameSs);
-            }
+            sourceSelectedId = id;
+            source.setText(nameSs);
             dialog.dismiss(); // close dialog
         });
 

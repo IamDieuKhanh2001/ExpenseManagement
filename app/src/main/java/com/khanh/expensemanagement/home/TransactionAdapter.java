@@ -39,7 +39,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
 
         holder.transaction_title_tv.setText(transactionHistoryList.get(position).getTransactionTitle());
         holder.category_tv.setText(transactionHistoryList.get(position).getCategoryTitle());
-        holder.transaction_up.setText(transactionHistoryList.get(position).getTransactionUp());
+        holder.transaction_up.setText(String.valueOf(transactionHistoryList.get(position).getAmount()));
     }
 
     @Override

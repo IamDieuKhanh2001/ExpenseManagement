@@ -5,9 +5,18 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateTimeUtil {
+
+    public static String getCurrentDateTime() {
+
+        // Định dạng datetime thành 'YYYY-MM-DD HH:MM:SS'
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
+    }
 
     public static void showDateTimePicker(Context context, EditText editText) {
         Calendar calendar = Calendar.getInstance();

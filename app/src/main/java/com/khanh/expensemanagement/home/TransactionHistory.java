@@ -7,13 +7,16 @@ public class TransactionHistory {
     private  Integer transactionId;
     private  String transactionTitle;
     private  String categoryTitle;
-    private  String transactionUp;
+    private  Integer amount;
 
-    public TransactionHistory(Integer transactionId, String transactionTitle, String categoryTitle, String transactionUp) {
+    public TransactionHistory(Integer transactionId, String transactionTitle, String categoryTitle, Integer amount) {
         this.transactionId = transactionId;
         this.transactionTitle = transactionTitle;
         this.categoryTitle = categoryTitle;
-        this.transactionUp = transactionUp;
+        this.amount = amount;
+    }
+
+    public TransactionHistory() {
     }
 
     public Integer getTransactionId() {
@@ -40,11 +43,11 @@ public class TransactionHistory {
         this.categoryTitle = categoryTitle;
     }
 
-    public String getTransactionUp() {
-        return transactionUp;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setTransactionUp(String transactionUp) {
-        this.transactionUp = transactionUp;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

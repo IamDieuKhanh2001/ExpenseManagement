@@ -12,6 +12,9 @@ public class Source {
         this.image = image;
     }
 
+    public Source() {
+    }
+
     public Integer getId() {
         return id;
     }
