@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/source_icon"
-        app:srcCompat="@drawable/source_of_fund_1"
+        app:srcCompat="@drawable/ic_no_image"
         android:layout_width="60dp"
         android:layout_height="60dp" />
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -39,10 +40,13 @@ public class RegisterTransActivity extends AppCompatActivity {
     EditText note;
     Button add_expense;
     RecyclerView source_recycler_view;
+    ImageView source_icon;
     DatabaseHelper databaseHelper;
 
     Integer categorySelectedId;
     Integer sourceSelectedId;
+
+    ArrayList<Source> sourceList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,8 @@ public class RegisterTransActivity extends AppCompatActivity {
         source.setClickable(true);
         source.setOnClickListener(view -> showSourceBottomDialog());
 
+        source_icon = findViewById(R.id.source_icon);
+
         note = findViewById(R.id.note);
 
         add_expense = findViewById(R.id.add_expense);
@@ -106,7 +112,7 @@ public class RegisterTransActivity extends AppCompatActivity {
 
     private void getDataSourceList(Dialog dialog) {
 
-        ArrayList<Source> sourceList = new ArrayList<>();
+        sourceList = new ArrayList<>();
 
         Cursor cursor = databaseHelper.sourceFindAll();
         if (cursor != null && cursor.moveToFirst()) {
@@ -125,6 +131,14 @@ public class RegisterTransActivity extends AppCompatActivity {
             Toast.makeText(this, "Clicked: " + id, Toast.LENGTH_SHORT).show();
             sourceSelectedId = id;
             source.setText(nameSs);
+            if (sourceList.get(position).getImage() != null) {
+
+                int imageResId = this.getResources().getIdentifier(sourceList.get(position).getImage(), "drawable", this.getPackageName());
+                if (imageResId != 0) {
+
+                    source_icon.setImageResource(imageResId);
+                }
+            }
             dialog.dismiss(); // close dialog
         });
 

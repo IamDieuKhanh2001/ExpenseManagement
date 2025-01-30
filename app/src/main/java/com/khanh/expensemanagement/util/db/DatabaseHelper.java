@@ -91,12 +91,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "INSERT INTO transactions (\"amount\",\"note\",\"category_id\",\"transaction_dt\",\"source_id\",\"ins_dttm\",\"upd_dttm\") VALUES (2000,'text 1 note',1,'2025-01-20',NULL,'2025-01-26 19:42:00','2025-01-26 19:42:00');",
                 "INSERT INTO transactions (\"amount\",\"note\",\"category_id\",\"transaction_dt\",\"source_id\",\"ins_dttm\",\"upd_dttm\") VALUES (3000,'text 1 note',1,'2025-01-20',NULL,'2025-01-26 19:42:00','2025-01-26 19:42:00');",
 
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (1,'現金',NULL);",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (2,'振込',NULL);",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (3,'スイカ',NULL);",
+                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (1,'現金','ic_source_cash');",
+                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (2,'振込','ic_source_card');",
+                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (3,'スイカ','ic_source_suica');",
                 "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (4,'その他',NULL);",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (5,'予備１',NULL);",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (6,'予備２',NULL);"
         };
 
         for (String query : seederQueries) {

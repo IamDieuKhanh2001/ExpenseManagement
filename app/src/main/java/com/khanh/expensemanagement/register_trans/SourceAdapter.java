@@ -39,6 +39,14 @@ public class SourceAdapter extends  RecyclerView.Adapter<SourceViewHolder> {
     public void onBindViewHolder(@NonNull SourceViewHolder holder, int position) {
 
         holder.setId(sourceList.get(position).getId());
+        if (sourceList.get(position).getImage() != null) {
+
+            int imageResId = context.getResources().getIdentifier(sourceList.get(position).getImage(), "drawable", context.getPackageName());
+            if (imageResId != 0) {
+
+                holder.source_icon.setImageResource(imageResId);
+            }
+        }
         holder.source_name.setText(sourceList.get(position).getNameSs());
     }
 
