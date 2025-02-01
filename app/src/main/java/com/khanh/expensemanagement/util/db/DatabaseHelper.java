@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String TABLE_CATEGORIES = "categories";
     private String TABLE_TRANSACTION = "transactions";
     private String TABLE_SOURCES = "sources";
+    private String TABLE_M_NAME = "m_name";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -59,9 +60,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "upd_dttm" + " TEXT " +
                 ");";
 
+        String queryCreateMName = "CREATE TABLE " + TABLE_M_NAME +
+                " (" +
+                "id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "name_ident_cd" + " TEXT NOT NULL, " +
+                "name_cd" + " TEXT NOT NULL, " +
+                "name_ident_name" + " TEXT NOT NULL, " +
+                "name_ident_note" + " TEXT NOT NULL, " +
+                "name_display_seq" + " INTEGER NOT NULL, " +
+                "name_ss" + " TEXT NOT NULL, " +
+                "name_rk" + " TEXT NOT NULL, " +
+                "drawable_icon_url" + " TEXT, " +
+                "ins_dttm" + " TEXT, " +
+                "upd_dttm" + " TEXT, " +
+                "CONSTRAINT m_name_index1 UNIQUE (name_ident_cd, name_cd)" +
+                ");";
+
         sqLiteDatabase.execSQL(queryCreateCategories);
         sqLiteDatabase.execSQL(queryCreateTransaction);
         sqLiteDatabase.execSQL(queryCreateSources);
+        sqLiteDatabase.execSQL(queryCreateMName);
 
         createSeedData(sqLiteDatabase);
     }
@@ -95,11 +113,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (2,'振込','ic_source_card');",
                 "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (3,'スイカ','ic_source_suica');",
                 "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (4,'その他',NULL);",
+
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (1,'sourcePaymentKbn','1','支払い方','',1,'現金','現金','ic_source_cash','2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (2,'sourcePaymentKbn','2','支払い方','',2,'振込','振込','ic_source_card','2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (3,'sourcePaymentKbn','3','支払い方','',3,'スイカ','スイカ','ic_source_suica','2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (4,'sourcePaymentKbn','4','支払い方','',4,'その他','他',NULL,'2025-02-01','2025-02-01');",
+
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (5,'categoryKbn','1','カテゴリー','',1,'食べ物','食べ物',NULL,'2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (6,'categoryKbn','2','カテゴリー','',2,'輸送','輸送',NULL,'2025-02-01','2025-02-01');"
+
         };
 
         for (String query : seederQueries) {
             db.execSQL(query);
         }
+    }
+
+    public Cursor mNameFindAll(String nameIdentCd) {
+        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss, drawable_icon_url" +
+                " FROM " + TABLE_M_NAME +
+                " WHERE m_name.name_ident_cd = ?" +
+                " ORDER BY m_name.name_display_seq ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(nameIdentCd)});
+        }
+        return cursor;
     }
 
     public Cursor sourceFindAll() {

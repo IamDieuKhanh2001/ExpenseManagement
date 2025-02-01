@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
+import com.khanh.expensemanagement.naiji.NaijiFragment;
 import com.khanh.expensemanagement.register_trans.RegisterTransActivity;
 
 public class BaseActivity extends AppCompatActivity {
@@ -39,7 +40,7 @@ public class BaseActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.budget) {
                 replaceFragment(new BudgetFragment());
             } else if (item.getItemId() == R.id.subscriptions) {
-//                replaceFragment(new SubscriptionFragment());
+                replaceFragment(new NaijiFragment());
             } else if (item.getItemId() == R.id.library) {
 //                replaceFragment(new LibraryFragment());
             }
