@@ -2,18 +2,19 @@ package com.khanh.expensemanagement.register_trans;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,29 +25,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
+import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
+import com.khanh.expensemanagement.m_name.view.MNameAdapter;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
-
-import java.util.ArrayList;
 
 public class RegisterTransActivity extends AppCompatActivity {
 
     private final String ACTIVITY_TITLE = "Add expense";
 
     EditText amount;
-    EditText category;
+    EditText m_name_category;
     EditText date;
-    EditText source;
+    EditText m_name_source;
     EditText note;
     Button add_expense;
-    RecyclerView source_recycler_view;
     ImageView source_icon;
     DatabaseHelper databaseHelper;
+    RecyclerView m_name_recycler_view;
+    TextView m_name_title;
 
     Integer categorySelectedId;
     Integer sourceSelectedId;
-
-    ArrayList<Source> sourceList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class RegisterTransActivity extends AppCompatActivity {
         }
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
+        initTextWatcher();
     }
 
     @Override
@@ -77,11 +79,11 @@ public class RegisterTransActivity extends AppCompatActivity {
 
         amount = findViewById(R.id.amount);
 
-        category = findViewById(R.id.category);
-        category.setFocusable(false);
-        category.setClickable(true);
-        category.setOnClickListener(view -> {
-//                showBottomDialog();
+        m_name_category = findViewById(R.id.m_name_category);
+        m_name_category.setFocusable(false);
+        m_name_category.setClickable(true);
+        m_name_category.setOnClickListener(view -> {
+            showBottomCategoryDialog(CategoryClass.NAME_IDENT_CD, false);
         });
 
         date = findViewById(R.id.date);
@@ -92,10 +94,10 @@ public class RegisterTransActivity extends AppCompatActivity {
             DateTimeUtil.showDatePicker(RegisterTransActivity.this, (EditText) view); // Open date picker dialog
         });
 
-        source = findViewById(R.id.source);
-        source.setFocusable(false);
-        source.setClickable(true);
-        source.setOnClickListener(view -> showSourceBottomDialog());
+        m_name_source = findViewById(R.id.m_name_source);
+        m_name_source.setFocusable(false);
+        m_name_source.setClickable(true);
+        m_name_source.setOnClickListener(view -> showSourceBottomDialog(SourcePaymentClass.NAME_IDENT_CD, true));
 
         source_icon = findViewById(R.id.source_icon);
 
@@ -110,55 +112,96 @@ public class RegisterTransActivity extends AppCompatActivity {
         });
     }
 
-    private void getDataSourceList(Dialog dialog) {
+    private void initTextWatcher() {
 
-        sourceList = new ArrayList<>();
+        add_expense.setEnabled(false);
 
-        Cursor cursor = databaseHelper.sourceFindAll();
-        if (cursor != null && cursor.moveToFirst()) {
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            do {
-                Source source = new Source();
-                source.setId(cursor.getInt(0));
-                source.setNameSs(cursor.getString(1));
-                source.setImage(cursor.getString(2));
-                sourceList.add(source);
-            } while (cursor.moveToNext());
-        }
-
-        // Click source item
-        SourceAdapter sourceAdapter = new SourceAdapter(RegisterTransActivity.this, RegisterTransActivity.this, sourceList, (position, id, nameSs, view) -> {
-            Toast.makeText(this, "Clicked: " + id, Toast.LENGTH_SHORT).show();
-            sourceSelectedId = id;
-            source.setText(nameSs);
-            if (sourceList.get(position).getImage() != null) {
-
-                int imageResId = this.getResources().getIdentifier(sourceList.get(position).getImage(), "drawable", this.getPackageName());
-                if (imageResId != 0) {
-
-                    source_icon.setImageResource(imageResId);
-                }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dataErrorCheck();
             }
-            dialog.dismiss(); // close dialog
-        });
 
-        source_recycler_view.setAdapter(sourceAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(RegisterTransActivity.this, 4);
-        source_recycler_view.setLayoutManager(layoutManager);
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        amount.addTextChangedListener(textWatcher);
+        m_name_category.addTextChangedListener(textWatcher);
+        date.addTextChangedListener(textWatcher);
+        m_name_source.addTextChangedListener(textWatcher);
     }
 
-    private void showSourceBottomDialog() {
+    private void dataErrorCheck() {
+
+        String amountText = amount.getText().toString().trim();
+        String categoryText = m_name_category.getText().toString();
+        String dateText = date.getText().toString().trim();
+        String sourceText = m_name_source.getText().toString();
+
+        add_expense.setEnabled(!amountText.isEmpty() && !categoryText.isEmpty() && !dateText.isEmpty() && !sourceText.isEmpty());
+    }
+
+    private void showBottomCategoryDialog(String nameIdentCd, Boolean enableCellIcon) {
 
         final Dialog dialog = new Dialog(RegisterTransActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.source_of_fund_bottom);
+        dialog.setContentView(R.layout.m_name_bottom);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());
 
         // add data dialog
-        source_recycler_view = dialog.findViewById(R.id.source_recycler_view);
-        getDataSourceList(dialog);
+        m_name_recycler_view = dialog.findViewById(R.id.m_name_recycler_view);
+        m_name_title = dialog.findViewById(R.id.m_name_title);
+        m_name_title.setText("カテゴリー");
+
+        MNameAdapter mNameAdapter = new MNameAdapter(RegisterTransActivity.this, RegisterTransActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
+            Toast.makeText(RegisterTransActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+            m_name_category.setText(mName.getNameSs());
+            categorySelectedId = Integer.valueOf(mName.getNameCd());
+            dialog.dismiss(); // close dialog
+        });
+
+        m_name_recycler_view.setAdapter(mNameAdapter);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(RegisterTransActivity.this, 4);
+        m_name_recycler_view.setLayoutManager(layoutManager);
+
+        // display dialog
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void showSourceBottomDialog(String nameIdentCd, Boolean enableCellIcon) {
+
+        final Dialog dialog = new Dialog(RegisterTransActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.m_name_bottom);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        // add data dialog
+        m_name_recycler_view = dialog.findViewById(R.id.m_name_recycler_view);
+        m_name_title = dialog.findViewById(R.id.m_name_title);
+        m_name_title.setText("支払い方");
+
+        MNameAdapter mNameAdapter = new MNameAdapter(RegisterTransActivity.this, RegisterTransActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
+            Toast.makeText(RegisterTransActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+            m_name_source.setText(mName.getNameSs());
+            sourceSelectedId = Integer.valueOf(mName.getNameCd());
+            dialog.dismiss(); // close dialog
+        });
+
+        m_name_recycler_view.setAdapter(mNameAdapter);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(RegisterTransActivity.this, 4);
+        m_name_recycler_view.setLayoutManager(layoutManager);
 
         // display dialog
         dialog.show();

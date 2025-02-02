@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/category"
+            android:id="@+id/m_name_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
@@ -63,7 +63,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp" />
             <EditText
-                android:id="@+id/source"
+                android:id="@+id/m_name_source"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
