@@ -42,6 +42,7 @@ public class TransRegisterActivity extends AppCompatActivity {
     EditText m_name_source;
     EditText note;
     Button add_expense;
+    ImageView category_icon;
     ImageView source_icon;
     DatabaseHelper databaseHelper;
     RecyclerView m_name_recycler_view;
@@ -84,8 +85,11 @@ public class TransRegisterActivity extends AppCompatActivity {
         m_name_category.setFocusable(false);
         m_name_category.setClickable(true);
         m_name_category.setOnClickListener(view -> {
-            showBottomCategoryDialog(CategoryClass.NAME_IDENT_CD, false);
+            showBottomCategoryDialog(CategoryClass.NAME_IDENT_CD, true);
         });
+
+        category_icon = findViewById(R.id.category_icon);
+        category_icon.setVisibility(View.GONE);
 
         date = findViewById(R.id.date);
         date.setFocusable(false);
@@ -165,6 +169,19 @@ public class TransRegisterActivity extends AppCompatActivity {
             Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
             m_name_category.setText(mName.getNameSs());
             categorySelectedId = Integer.valueOf(mName.getNameCd());
+            // Enable icon
+            category_icon.setVisibility(View.VISIBLE);
+            if (mName.getDrawableIconUrl() != null) {
+
+                int imageResId = this.getResources().getIdentifier(mName.getDrawableIconUrl(), "drawable", this.getPackageName());
+                if (imageResId != 0) {
+
+                    category_icon.setImageResource(imageResId);
+                }
+            } else {
+
+                category_icon.setImageResource(R.drawable.ic_no_image);
+            }
             dialog.dismiss(); // close dialog
         });
 

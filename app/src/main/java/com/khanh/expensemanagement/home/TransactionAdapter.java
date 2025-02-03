@@ -18,11 +18,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
     private Context context;
     private Activity activity;
     private final ArrayList<TransactionHistory> transactionHistoryList;
+    private final TransactionAdapter.OnItemListener onItemListener;
 
-    public TransactionAdapter(Context context, Activity activity, ArrayList<TransactionHistory> transactionHistoryList) {
+    public TransactionAdapter(Context context, Activity activity, ArrayList<TransactionHistory> transactionHistoryList, OnItemListener onItemListener) {
         this.context = context;
         this.activity = activity;
         this.transactionHistoryList = transactionHistoryList;
+        this.onItemListener = onItemListener;
     }
 
 
@@ -31,12 +33,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.transaction_row, parent, false);
-        return new TransactionViewHolder(view);
+        return new TransactionViewHolder(view, onItemListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
 
+        holder.setTransactionHistory(transactionHistoryList.get(position));
         if (!transactionHistoryList.get(position).getTransactionTitle().isEmpty()) {
 
             holder.transaction_title_tv.setText(transactionHistoryList.get(position).getTransactionTitle());
@@ -51,5 +54,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
     @Override
     public int getItemCount() {
         return transactionHistoryList.size();
+    }
+
+    public interface OnItemListener {
+
+        void onItemClick(int position, TransactionHistory transactionHistory, View view);
     }
 }

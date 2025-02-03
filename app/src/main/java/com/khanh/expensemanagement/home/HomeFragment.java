@@ -1,5 +1,6 @@
 package com.khanh.expensemanagement.home;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -16,9 +17,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
+import com.khanh.expensemanagement.trans_mainte.TransDetailActivity;
+import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.DataUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
@@ -244,7 +248,13 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
             }
         });
 
-        TransactionAdapter transactionAdapter = new TransactionAdapter(requireContext(), getActivity(), transactionHistoryList);
+        TransactionAdapter transactionAdapter = new TransactionAdapter(requireContext(), getActivity(), transactionHistoryList, (position, transactionHistory, view) -> {
+
+            Toast.makeText(getContext(), "Clicked: " + transactionHistory.getTransactionId(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(view.getContext(), TransDetailActivity.class);
+            intent.putExtra("transactionId", transactionHistory.getTransactionId());
+            startActivity(intent);
+        });
         transaction_recycler_view.setAdapter(transactionAdapter);
         transaction_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (transactionAdapter.getItemCount() == 0) {

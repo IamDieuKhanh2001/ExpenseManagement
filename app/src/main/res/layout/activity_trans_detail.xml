@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".trans_mainte.TransDetailActivity">
 
     <androidx.cardview.widget.CardView
@@ -35,25 +36,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="10dp"
                 android:text="Expenditure"
                 android:textColor="@color/gray"
                 android:textSize="15dp"
-                android:paddingTop="10dp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="amount_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="5dp"
                 android:text="111111円"
                 android:textColor="@color/black"
                 android:textSize="25dp"
-                android:paddingTop="5dp"
                 android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#f0e9e9"
+                app:cardCornerRadius="8dp"
+                android:layout_marginTop="10dp"
+                app:cardElevation="4dp">
+                <TextView
+                    android:id="@+id/note_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Note NoteNoteNoteNoteNoteNoteNoteNoteNoteNoteNoteNoteNoteNote"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
+            </androidx.cardview.widget.CardView>
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:stretchColumns="1">
 
                 <TableRow>
@@ -70,6 +90,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/source_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:padding="8dp"
@@ -77,6 +98,7 @@
                             android:textAlignment="textEnd" />
 
                         <ImageView
+                            android:id="@+id/source_icon"
                             android:layout_width="50dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -97,6 +119,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/date_tv"
                         android:padding="8dp"
                         android:text="Yesterday, dd/mm/yyyy"
                         android:textAlignment="textEnd" />
@@ -121,6 +144,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/category_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:padding="8dp"
@@ -128,11 +152,50 @@
                             android:textAlignment="textEnd" />
 
                         <ImageView
+                            android:id="@+id/category_icon"
                             android:layout_width="50dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/ic_source_cash" />
                     </LinearLayout>
+                </TableRow>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/line_gray" />
+
+                <TableRow>
+
+                    <TextView
+                        android:padding="8dp"
+                        android:text="Trasaction Id"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/transaction_id_tv"
+                        android:padding="8dp"
+                        android:text="-1"
+                        android:textAlignment="textEnd" />
+                </TableRow>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/line_gray" />
+
+                <TableRow>
+
+                    <TextView
+                        android:padding="8dp"
+                        android:text="Last update at"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/last_upd_dttm_tv"
+                        android:padding="8dp"
+                        android:text="dd/mm/yyyy hh:mm:ss"
+                        android:textAlignment="textEnd" />
                 </TableRow>
             </TableLayout>
 
@@ -152,7 +215,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background=""
+                    android:background="@android:color/transparent"
                     android:drawableLeft="@drawable/baseline_delete_outline_24"
                     android:padding="8dp"
                     android:text="Delete"
@@ -170,9 +233,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background=""
-                    android:padding="8dp"
+                    android:background="@android:color/transparent"
                     android:drawableLeft="@drawable/baseline_edit_24"
+                    android:padding="8dp"
                     android:text="Edit"
                     android:textAllCaps="false"
                     android:textColor="@color/black"

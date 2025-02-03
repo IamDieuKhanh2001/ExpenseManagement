@@ -24,18 +24,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/m_name_category"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
-            android:allowClickWhenDisabled="true"
-            android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
-            android:ems="10"
-            android:hint="Category*"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/category_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                app:srcCompat="@drawable/ic_category_food" />
+            <EditText
+                android:id="@+id/m_name_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:allowClickWhenDisabled="true"
+                android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
+                android:ems="10"
+                android:hint="Category*"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/date"
@@ -53,15 +66,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginTop="26dp">
+            android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/source_icon"
-                app:srcCompat="@drawable/ic_source_cash"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
+                app:srcCompat="@drawable/ic_source_cash" />
+
             <EditText
                 android:id="@+id/m_name_source"
                 android:layout_width="match_parent"

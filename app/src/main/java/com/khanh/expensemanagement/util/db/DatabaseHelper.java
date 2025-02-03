@@ -80,8 +80,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (3,'sourcePaymentKbn','3','支払い方','',3,'スイカ','スイカ','ic_source_suica','2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (4,'sourcePaymentKbn','4','支払い方','',4,'その他','他',NULL,'2025-02-01','2025-02-01');",
 
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (5,'categoryKbn','1','カテゴリー','',1,'食べ物','食べ物',NULL,'2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (6,'categoryKbn','2','カテゴリー','',2,'輸送','輸送',NULL,'2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (5,'categoryKbn','1','カテゴリー','',1,'食べ物','食べ物','ic_category_food','2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (6,'categoryKbn','2','カテゴリー','',2,'輸送','輸送','ic_category_transport','2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (7,'categoryKbn','3','カテゴリー','',3,'美','美',NULL,'2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (8,'categoryKbn','4','カテゴリー','',4,'勉強','勉強',NULL,'2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (9,'categoryKbn','5','カテゴリー','',5,'買い物','買い物',NULL,'2025-02-01','2025-02-01');",
@@ -144,6 +144,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         if (db != null) {
             cursor = db.rawQuery(query, new String[]{String.valueOf(date)});
+        }
+        return cursor;
+    }
+
+    public Cursor transactionFindById(Integer id) {
+        String query = "SELECT " + "id, amount, note, category_id, transaction_dt, source_id, ins_dttm, upd_dttm" +
+                " FROM " + TABLE_TRANSACTION +
+                " WHERE id = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, new String[]{id.toString()});
         }
         return cursor;
     }
