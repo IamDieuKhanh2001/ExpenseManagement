@@ -12,4 +12,5 @@
     <color name="blue">#0000FF</color>
     <color name="lavender">#8692f7</color>
     <color name="pink">#ff59d6</color>
+    <color name="line_gray">#80A0A0A0</color>
 </resources>

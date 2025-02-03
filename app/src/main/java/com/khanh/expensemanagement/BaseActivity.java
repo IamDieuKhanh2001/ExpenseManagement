@@ -14,7 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
 import com.khanh.expensemanagement.naiji.NaijiFragment;
-import com.khanh.expensemanagement.register_trans.RegisterTransActivity;
+import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -51,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), RegisterTransActivity.class);
+                Intent intent = new Intent(view.getContext(), TransRegisterActivity.class);
                 startActivity(intent);
             }
         });

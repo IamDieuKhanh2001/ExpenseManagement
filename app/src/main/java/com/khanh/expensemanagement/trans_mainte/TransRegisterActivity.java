@@ -1,4 +1,4 @@
-package com.khanh.expensemanagement.register_trans;
+package com.khanh.expensemanagement.trans_mainte;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -32,7 +32,7 @@ import com.khanh.expensemanagement.m_name.view.MNameAdapter;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
-public class RegisterTransActivity extends AppCompatActivity {
+public class TransRegisterActivity extends AppCompatActivity {
 
     private final String ACTIVITY_TITLE = "Add expense";
 
@@ -54,7 +54,7 @@ public class RegisterTransActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register_trans);
+        setContentView(R.layout.activity_trans_register);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(ACTIVITY_TITLE);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,7 +92,7 @@ public class RegisterTransActivity extends AppCompatActivity {
         date.setClickable(true);
         date.setOnClickListener(view -> {
 
-            DateTimeUtil.showDatePicker(RegisterTransActivity.this, (EditText) view); // Open date picker dialog
+            DateTimeUtil.showDatePicker(TransRegisterActivity.this, (EditText) view); // Open date picker dialog
         });
 
         m_name_source = findViewById(R.id.m_name_source);
@@ -149,7 +149,7 @@ public class RegisterTransActivity extends AppCompatActivity {
 
     private void showBottomCategoryDialog(String nameIdentCd, Boolean enableCellIcon) {
 
-        final Dialog dialog = new Dialog(RegisterTransActivity.this);
+        final Dialog dialog = new Dialog(TransRegisterActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.m_name_bottom);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
@@ -161,15 +161,15 @@ public class RegisterTransActivity extends AppCompatActivity {
         m_name_title = dialog.findViewById(R.id.m_name_title);
         m_name_title.setText("カテゴリー");
 
-        MNameAdapter mNameAdapter = new MNameAdapter(RegisterTransActivity.this, RegisterTransActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(RegisterTransActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+        MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
+            Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
             m_name_category.setText(mName.getNameSs());
             categorySelectedId = Integer.valueOf(mName.getNameCd());
             dialog.dismiss(); // close dialog
         });
 
         m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(RegisterTransActivity.this, 4);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransRegisterActivity.this, 4);
         m_name_recycler_view.setLayoutManager(layoutManager);
 
         // display dialog
@@ -182,7 +182,7 @@ public class RegisterTransActivity extends AppCompatActivity {
 
     private void showSourceBottomDialog(String nameIdentCd, Boolean enableCellIcon) {
 
-        final Dialog dialog = new Dialog(RegisterTransActivity.this);
+        final Dialog dialog = new Dialog(TransRegisterActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.m_name_bottom);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
@@ -194,8 +194,8 @@ public class RegisterTransActivity extends AppCompatActivity {
         m_name_title = dialog.findViewById(R.id.m_name_title);
         m_name_title.setText("支払い方");
 
-        MNameAdapter mNameAdapter = new MNameAdapter(RegisterTransActivity.this, RegisterTransActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(RegisterTransActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+        MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
+            Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
             m_name_source.setText(mName.getNameSs());
             sourceSelectedId = Integer.valueOf(mName.getNameCd());
             // Enable icon
@@ -215,7 +215,7 @@ public class RegisterTransActivity extends AppCompatActivity {
         });
 
         m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(RegisterTransActivity.this, 4);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransRegisterActivity.this, 4);
         m_name_recycler_view.setLayoutManager(layoutManager);
 
         // display dialog
