@@ -10,17 +10,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.khanh.expensemanagement.R;
-import com.khanh.expensemanagement.register_trans.Source;
+import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
+import com.khanh.expensemanagement.util.DataUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
@@ -233,6 +232,17 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
                 transactionHistoryList.add(transactionHistory);
             } while (cursor.moveToNext());
         }
+
+        // Get category
+        transactionHistoryList.forEach(transactionHistory -> {
+
+            Cursor cursorMName = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, DataUtil.fncNS(transactionHistory.getCategoryTitle()));
+
+            if (cursorMName != null && cursorMName.moveToFirst()) {
+
+                transactionHistory.setCategoryTitle(cursorMName.getString(3));
+            }
+        });
 
         TransactionAdapter transactionAdapter = new TransactionAdapter(requireContext(), getActivity(), transactionHistoryList);
         transaction_recycler_view.setAdapter(transactionAdapter);

@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -100,6 +101,7 @@ public class RegisterTransActivity extends AppCompatActivity {
         m_name_source.setOnClickListener(view -> showSourceBottomDialog(SourcePaymentClass.NAME_IDENT_CD, true));
 
         source_icon = findViewById(R.id.source_icon);
+        source_icon.setVisibility(View.GONE);
 
         note = findViewById(R.id.note);
 
@@ -196,6 +198,19 @@ public class RegisterTransActivity extends AppCompatActivity {
             Toast.makeText(RegisterTransActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
             m_name_source.setText(mName.getNameSs());
             sourceSelectedId = Integer.valueOf(mName.getNameCd());
+            // Enable icon
+            source_icon.setVisibility(View.VISIBLE);
+            if (mName.getDrawableIconUrl() != null) {
+
+                int imageResId = this.getResources().getIdentifier(mName.getDrawableIconUrl(), "drawable", this.getPackageName());
+                if (imageResId != 0) {
+
+                    source_icon.setImageResource(imageResId);
+                }
+            } else {
+
+                source_icon.setImageResource(R.drawable.ic_no_image);
+            }
             dialog.dismiss(); // close dialog
         });
 

@@ -19,9 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final Context context;
     private static final String DATABASE_NAME = "ExpenseManagement.db";
     private static final int DATABASE_VERSION = 1;
-    private String TABLE_CATEGORIES = "categories";
     private String TABLE_TRANSACTION = "transactions";
-    private String TABLE_SOURCES = "sources";
     private String TABLE_M_NAME = "m_name";
 
     public DatabaseHelper(@Nullable Context context) {
@@ -32,13 +30,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        String queryCreateCategories = "CREATE TABLE " + TABLE_CATEGORIES +
-                " (" +
-                "id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
-                "name_ss" + " TEXT, " +
-                "image" + " TEXT " +
-                ");";
-
         String queryCreateTransaction = "CREATE TABLE " + TABLE_TRANSACTION +
                 " (" +
                 "id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
@@ -47,15 +38,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "category_id" + " INTEGER, " +
                 "transaction_dt" + " TEXT, " +
                 "source_id" + " INTEGER, " +
-                "ins_dttm" + " TEXT, " +
-                "upd_dttm" + " TEXT " +
-                ");";
-
-        String queryCreateSources = "CREATE TABLE " + TABLE_SOURCES +
-                " (" +
-                "id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
-                "name_ss" + " TEXT, " +
-                "image" + " TEXT, " +
                 "ins_dttm" + " TEXT, " +
                 "upd_dttm" + " TEXT " +
                 ");";
@@ -76,9 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "CONSTRAINT m_name_index1 UNIQUE (name_ident_cd, name_cd)" +
                 ");";
 
-        sqLiteDatabase.execSQL(queryCreateCategories);
         sqLiteDatabase.execSQL(queryCreateTransaction);
-        sqLiteDatabase.execSQL(queryCreateSources);
         sqLiteDatabase.execSQL(queryCreateMName);
 
         createSeedData(sqLiteDatabase);
@@ -86,7 +66,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_M_NAME);
         onCreate(sqLiteDatabase);
@@ -96,33 +75,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String[] seederQueries = new String[]{
 
-                "INSERT INTO categories (id, name_ss, image) VALUES (1, '食べ物', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (2, '輸送', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (3, '美', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (4, '健康', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (5, 'チャリティー', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (6, '買い物', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (7, 'エンターテインメント', NULL);",
-                "INSERT INTO categories (id, name_ss, image) VALUES (8, '勉強', NULL);",
-
-                "INSERT INTO transactions (\"amount\",\"note\",\"category_id\",\"transaction_dt\",\"source_id\",\"ins_dttm\",\"upd_dttm\") VALUES (1000,'text 1 note',1,'2025-12-20',NULL,'2025-01-26 19:42:00','2025-01-26 19:42:00');",
-                "INSERT INTO transactions (\"amount\",\"note\",\"category_id\",\"transaction_dt\",\"source_id\",\"ins_dttm\",\"upd_dttm\") VALUES (2000,'text 1 note',1,'2025-01-01',NULL,'2025-01-26 19:42:00','2025-01-26 19:42:00');",
-                "INSERT INTO transactions (\"amount\",\"note\",\"category_id\",\"transaction_dt\",\"source_id\",\"ins_dttm\",\"upd_dttm\") VALUES (2000,'text 1 note',1,'2025-01-20',NULL,'2025-01-26 19:42:00','2025-01-26 19:42:00');",
-                "INSERT INTO transactions (\"amount\",\"note\",\"category_id\",\"transaction_dt\",\"source_id\",\"ins_dttm\",\"upd_dttm\") VALUES (3000,'text 1 note',1,'2025-01-20',NULL,'2025-01-26 19:42:00','2025-01-26 19:42:00');",
-
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (1,'現金','ic_source_cash');",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (2,'振込','ic_source_card');",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (3,'スイカ','ic_source_suica');",
-                "INSERT INTO sources (\"id\",\"name_ss\",\"image\") VALUES (4,'その他',NULL);",
-
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (1,'sourcePaymentKbn','1','支払い方','',1,'現金','現金','ic_source_cash','2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (2,'sourcePaymentKbn','2','支払い方','',2,'振込','振込','ic_source_card','2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (3,'sourcePaymentKbn','3','支払い方','',3,'スイカ','スイカ','ic_source_suica','2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (4,'sourcePaymentKbn','4','支払い方','',4,'その他','他',NULL,'2025-02-01','2025-02-01');",
 
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (5,'categoryKbn','1','カテゴリー','',1,'食べ物','食べ物',NULL,'2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (6,'categoryKbn','2','カテゴリー','',2,'輸送','輸送',NULL,'2025-02-01','2025-02-01');"
-
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (6,'categoryKbn','2','カテゴリー','',2,'輸送','輸送',NULL,'2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (7,'categoryKbn','3','カテゴリー','',3,'美','美',NULL,'2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (8,'categoryKbn','4','カテゴリー','',4,'勉強','勉強',NULL,'2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (9,'categoryKbn','5','カテゴリー','',5,'買い物','買い物',NULL,'2025-02-01','2025-02-01');",
+                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (10,'categoryKbn','6','カテゴリー','',6,'エンターテインメント','エンターテインメント',NULL,'2025-02-01','2025-02-01');",
         };
 
         for (String query : seederQueries) {
@@ -144,26 +107,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor sourceFindAll() {
-        String query = "SELECT " + "id, name_ss, image, ins_dttm, upd_dttm"
-                + " FROM " + TABLE_SOURCES;
+    public Cursor mNameSelectByUk1(String nameIdentCd, String nameCd) {
+
+        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss, drawable_icon_url" +
+                " FROM " + TABLE_M_NAME +
+                " WHERE m_name.name_ident_cd = ?" +
+                " AND m_name.name_cd = ? ";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
         if (db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-
-    public Cursor categoryFindAll() {
-        String query = "SELECT " + "*"
-                + " FROM " + TABLE_CATEGORIES;
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        if (db != null) {
-            cursor = db.rawQuery(query, null);
+            cursor = db.rawQuery(query, new String[]{String.valueOf(nameIdentCd), String.valueOf(nameCd)});
         }
         return cursor;
     }
