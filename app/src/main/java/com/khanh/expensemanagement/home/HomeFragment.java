@@ -230,7 +230,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
             do {
                 TransactionHistory transactionHistory = new TransactionHistory();
                 transactionHistory.setTransactionId(cursor.getInt(0));
-                transactionHistory.setTransactionTitle(cursor.getString(2));
+                transactionHistory.setNote(cursor.getString(2));
                 transactionHistory.setCategoryTitle(cursor.getString(3));
                 transactionHistory.setAmount(cursor.getInt(1));
                 transactionHistoryList.add(transactionHistory);

@@ -40,9 +40,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
 
         holder.setTransactionHistory(transactionHistoryList.get(position));
-        if (!transactionHistoryList.get(position).getTransactionTitle().isEmpty()) {
+        if (!transactionHistoryList.get(position).getNote().isEmpty()) {
 
-            holder.transaction_title_tv.setText(transactionHistoryList.get(position).getTransactionTitle());
+            holder.transaction_title_tv.setText(transactionHistoryList.get(position).getNote());
         } else {
 
             holder.transaction_title_tv.setText(String.format("%sでの出費", transactionHistoryList.get(position).getCategoryTitle()));

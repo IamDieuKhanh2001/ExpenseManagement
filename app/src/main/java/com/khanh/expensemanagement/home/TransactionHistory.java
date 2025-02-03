@@ -5,15 +5,21 @@ import java.util.ArrayList;
 public class TransactionHistory {
 
     private  Integer transactionId;
-    private  String transactionTitle;
+    private  String note;
     private  String categoryTitle;
     private  Integer amount;
+    private String sourceName;
+    private String date;
+    private String updDttm;
 
-    public TransactionHistory(Integer transactionId, String transactionTitle, String categoryTitle, Integer amount) {
+    public TransactionHistory(Integer transactionId, String note, String categoryTitle, Integer amount, String sourceName, String date, String updDttm) {
         this.transactionId = transactionId;
-        this.transactionTitle = transactionTitle;
+        this.note = note;
         this.categoryTitle = categoryTitle;
         this.amount = amount;
+        this.sourceName = sourceName;
+        this.date = date;
+        this.updDttm = updDttm;
     }
 
     public TransactionHistory() {
@@ -27,12 +33,12 @@ public class TransactionHistory {
         this.transactionId = transactionId;
     }
 
-    public String getTransactionTitle() {
-        return transactionTitle;
+    public String getNote() {
+        return note;
     }
 
-    public void setTransactionTitle(String transactionTitle) {
-        this.transactionTitle = transactionTitle;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getCategoryTitle() {
@@ -49,5 +55,29 @@ public class TransactionHistory {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getUpdDttm() {
+        return updDttm;
+    }
+
+    public void setUpdDttm(String updDttm) {
+        this.updDttm = updDttm;
     }
 }

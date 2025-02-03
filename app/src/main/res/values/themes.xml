@@ -2,7 +2,7 @@
     <style name="Theme.ExpenseManagement" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/pink</item>
-<!--        <item name="colorPrimaryDark">@color/pink</item>-->
+        <item name="colorPrimaryDark">@color/white</item>
         <item name="colorPrimaryVariant">@color/lavender</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->

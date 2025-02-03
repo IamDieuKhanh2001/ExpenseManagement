@@ -1,7 +1,14 @@
 package com.khanh.expensemanagement.trans_mainte;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -11,6 +18,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.home.TransactionHistory;
+import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
+import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
+import com.khanh.expensemanagement.util.DataUtil;
+import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
 public class TransDetailActivity extends AppCompatActivity {
@@ -18,6 +30,17 @@ public class TransDetailActivity extends AppCompatActivity {
     private final String ACTIVITY_TITLE = "Transaction detail";
 
     DatabaseHelper databaseHelper;
+    TextView amount_tv;
+    TextView note_tv;
+    TextView source_tv;
+    ImageView source_icon;
+    TextView date_tv;
+    TextView category_tv;
+    ImageView category_icon;
+    TextView transaction_id_tv;
+    TextView last_upd_dttm_tv;
+    Button del_btn;
+    Button edit_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +54,7 @@ public class TransDetailActivity extends AppCompatActivity {
         }
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
+        getDataTransactionDetail();
     }
 
     @Override
@@ -45,6 +69,97 @@ public class TransDetailActivity extends AppCompatActivity {
 
     private void initWidgets() {
 
+        amount_tv = findViewById(R.id.amount_tv);
+        note_tv = findViewById(R.id.note_tv);
+        note_tv.setVisibility(View.GONE);
+        source_tv = findViewById(R.id.source_tv);
+        source_icon = findViewById(R.id.source_icon);
+        date_tv = findViewById(R.id.date_tv);
+        category_tv = findViewById(R.id.category_tv);
+        category_icon = findViewById(R.id.category_icon);
+        transaction_id_tv = findViewById(R.id.transaction_id_tv);
+        last_upd_dttm_tv = findViewById(R.id.last_upd_dttm_tv);
+        del_btn = findViewById(R.id.del_btn);
+        edit_btn = findViewById(R.id.edit_btn);
+    }
 
+    private void getDataTransactionDetail() {
+
+        String categoryIconName = "";
+        String sourceIconName = "";
+        int imageResId;
+
+        Intent intent = getIntent();
+        Integer transactionId = intent.getIntExtra("transactionId", -1);
+
+        // Get by id
+        Cursor cursor = databaseHelper.transactionFindById(transactionId);
+
+        TransactionHistory transactionHistory = new TransactionHistory();
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            transactionHistory.setAmount(cursor.getInt(1));
+            transactionHistory.setNote(cursor.getString(2));
+            transactionHistory.setSourceName(cursor.getString(5));
+            transactionHistory.setDate(cursor.getString(4));
+            transactionHistory.setCategoryTitle(cursor.getString(3));
+            transactionHistory.setTransactionId(cursor.getInt(0));
+            transactionHistory.setUpdDttm(cursor.getString(7));
+        }
+
+        // get m name category
+        Cursor cursorCategory = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, DataUtil.fncNS(transactionHistory.getCategoryTitle()));
+
+        if (cursorCategory != null && cursorCategory.moveToFirst()) {
+
+            transactionHistory.setCategoryTitle(cursorCategory.getString(3));
+            categoryIconName = DataUtil.fncNS(cursorCategory.getString(4));
+        }
+
+        // Get m name source
+        Cursor cursorSource = databaseHelper.mNameSelectByUk1(SourcePaymentClass.NAME_IDENT_CD, DataUtil.fncNS(transactionHistory.getSourceName()));
+
+        if (cursorSource != null && cursorSource.moveToFirst()) {
+
+            transactionHistory.setSourceName(cursorSource.getString(3));
+            sourceIconName = DataUtil.fncNS(cursorSource.getString(4));
+        }
+
+        // Set view data
+        amount_tv.setText(getString(R.string.transaction_amount_currency, transactionHistory.getAmount().toString()));
+        if (!transactionHistory.getNote().isEmpty()) {
+
+            note_tv.setText(transactionHistory.getNote());
+            note_tv.setVisibility(View.VISIBLE);
+        }
+        imageResId = this.getResources().getIdentifier(sourceIconName, "drawable", this.getPackageName());
+        if (imageResId != 0) {
+
+            source_icon.setVisibility(View.VISIBLE);
+            source_icon.setImageResource(imageResId);
+        } else {
+
+            source_icon.setVisibility(View.GONE);
+        }
+        source_tv.setText(transactionHistory.getSourceName());
+        date_tv.setText(transactionHistory.getDate());
+        imageResId = this.getResources().getIdentifier(categoryIconName, "drawable", this.getPackageName());
+        if (imageResId != 0) {
+
+            category_icon.setVisibility(View.VISIBLE);
+            category_icon.setImageResource(imageResId);
+        } else {
+
+            category_icon.setVisibility(View.GONE);
+        }
+        category_tv.setText(transactionHistory.getCategoryTitle());
+        transaction_id_tv.setText(transactionHistory.getTransactionId().toString());
+        last_upd_dttm_tv.setText(transactionHistory.getUpdDttm());
+
+        //Release cursor
+        SqliteUtil.releaseCursor(cursor);
+        SqliteUtil.releaseCursor(cursorCategory);
+        SqliteUtil.releaseCursor(cursorSource);
     }
 }
