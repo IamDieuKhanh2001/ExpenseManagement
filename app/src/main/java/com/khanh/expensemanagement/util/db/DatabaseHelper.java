@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.khanh.expensemanagement.ApplicationProperties;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 
 import java.time.LocalDate;
@@ -17,13 +18,11 @@ import java.time.LocalDate;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private final Context context;
-    private static final String DATABASE_NAME = "ExpenseManagement.db";
-    private static final int DATABASE_VERSION = 2;
     private final String TABLE_TRANSACTION = "transactions";
     private final String TABLE_M_NAME = "m_name";
 
     public DatabaseHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, ApplicationProperties.DATABASE_NAME, null, ApplicationProperties.DATABASE_VERSION);
         this.context = context;
     }
 
@@ -179,6 +178,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void updateTransaction(Integer id, Integer amount, String note, Integer category_id, String transaction_dt, Integer source_id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("amount", amount);
+        cv.put("note", note.trim());
+        cv.put("category_id", category_id);
+        cv.put("transaction_dt", transaction_dt);
+        cv.put("source_id", source_id);
+        cv.put("upd_dttm", DateTimeUtil.getCurrentDateTime());
+
+        long result = db.update(TABLE_TRANSACTION, cv, "id=?", new String[]{id.toString()});
+        if (result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
         }
     }
 

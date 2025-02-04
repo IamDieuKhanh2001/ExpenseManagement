@@ -2,9 +2,12 @@ package com.khanh.expensemanagement.trans_mainte;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.home.TransactionHistory;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
+import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
@@ -38,19 +42,18 @@ public class TransDetailActivity extends AppCompatActivity {
     Button del_btn;
     Button edit_btn;
 
+    Integer transactionId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_trans_detail);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(ACTIVITY_TITLE);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
-        }
+        ActivityUtil.enableActionBar(this, ACTIVITY_TITLE);
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
-        getDataTransactionDetail();
+        getIntentData();
+        getDataDetail();
     }
 
     @Override
@@ -82,8 +85,6 @@ public class TransDetailActivity extends AppCompatActivity {
             String dialogMessage = "Deleted transactions can not be recovered";
             FormUtil.openConfirmDialog(this, dialogTitle, dialogMessage, () -> {
 
-                Intent intent = getIntent();
-                Integer transactionId = intent.getIntExtra("transactionId", -1);
                 databaseHelper.deleteTransactionById(transactionId);
                 finish();
             });
@@ -91,18 +92,24 @@ public class TransDetailActivity extends AppCompatActivity {
         edit_btn = findViewById(R.id.edit_btn);
         edit_btn.setOnClickListener(view -> {
 
-
+            Intent intent = new Intent(view.getContext(), TransUpdateActivity.class);
+            intent.putExtra("transactionId", transactionId);
+            startActivity(intent);
+            finish();
         });
     }
 
-    private void getDataTransactionDetail() {
+    private void getIntentData() {
+
+        Intent intent = getIntent();
+        transactionId = intent.getIntExtra("transactionId", -1);
+    }
+
+    private void getDataDetail() {
 
         String categoryIconName = "";
         String sourceIconName = "";
         int imageResId;
-
-        Intent intent = getIntent();
-        Integer transactionId = intent.getIntExtra("transactionId", -1);
 
         // Get by id
         Cursor cursor = databaseHelper.transactionFindById(transactionId);

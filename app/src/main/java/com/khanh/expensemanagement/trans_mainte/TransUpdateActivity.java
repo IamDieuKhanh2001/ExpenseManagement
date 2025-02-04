@@ -2,6 +2,7 @@ package com.khanh.expensemanagement.trans_mainte;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,28 +22,34 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.home.TransactionHistory;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.m_name.view.MNameAdapter;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.DateTimeUtil;
+import com.khanh.expensemanagement.util.FormUtil;
+import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
-public class TransRegisterActivity extends AppCompatActivity {
+public class TransUpdateActivity extends AppCompatActivity {
 
-    private final String ACTIVITY_TITLE = "Add expense";
+    private final String ACTIVITY_TITLE = "Edit expense";
 
     EditText amount;
     EditText m_name_category;
     EditText date;
     EditText m_name_source;
     EditText note;
-    Button add_expense;
+    Button upd_expense;
     ImageView category_icon;
     ImageView source_icon;
     DatabaseHelper databaseHelper;
@@ -52,27 +59,33 @@ public class TransRegisterActivity extends AppCompatActivity {
     Integer categorySelectedId;
     Integer sourceSelectedId;
 
+    Integer transactionId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_trans_register);
+        setContentView(R.layout.activity_trans_update);
         ActivityUtil.enableActionBar(this, ACTIVITY_TITLE);
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
+        getIntentData();
+        getFormData();
         initTextWatcher();
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // Back to home
-            finish(); // end RegisterTransActivity
+            // Back to detail
+            Intent intent = new Intent(this, TransDetailActivity.class);
+            intent.putExtra("transactionId", transactionId);
+            startActivity(intent);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void initWidgets() {
 
@@ -93,7 +106,7 @@ public class TransRegisterActivity extends AppCompatActivity {
         date.setClickable(true);
         date.setOnClickListener(view -> {
 
-            DateTimeUtil.showDatePicker(TransRegisterActivity.this, (EditText) view); // Open date picker dialog
+            DateTimeUtil.showDatePicker(TransUpdateActivity.this, (EditText) view); // Open date picker dialog
         });
 
         m_name_source = findViewById(R.id.m_name_source);
@@ -106,19 +119,100 @@ public class TransRegisterActivity extends AppCompatActivity {
 
         note = findViewById(R.id.note);
 
-        add_expense = findViewById(R.id.add_expense);
-        add_expense.setOnClickListener(view -> {
-            databaseHelper.registerTransaction(Integer.valueOf(amount.getText().toString()), note.getText().toString(), categorySelectedId, date.getText().toString(), sourceSelectedId);
-            // Back to home
-            Intent intent = new Intent(this, MainActivity.class);
+        upd_expense = findViewById(R.id.upd_expense);
+        upd_expense.setOnClickListener(view -> {
+            databaseHelper.updateTransaction(transactionId, Integer.valueOf(amount.getText().toString()), note.getText().toString(), categorySelectedId, date.getText().toString(), sourceSelectedId);
+            // Back to detail
+            Intent intent = new Intent(this, TransDetailActivity.class);
+            intent.putExtra("transactionId", transactionId);
             startActivity(intent);
             finish();
         });
     }
 
+    private void getIntentData() {
+
+        Intent intent = getIntent();
+        transactionId = intent.getIntExtra("transactionId", -1);
+    }
+
+    private void getFormData() {
+
+        String categoryIconName = "";
+        String sourceIconName = "";
+        int imageResId;
+
+        // Get by id
+        Cursor cursor = databaseHelper.transactionFindById(transactionId);
+        TransactionHistory transactionHistory = new TransactionHistory();
+        if (cursor != null && cursor.moveToFirst()) {
+
+            transactionHistory.setAmount(cursor.getInt(1));
+            transactionHistory.setNote(cursor.getString(2));
+            transactionHistory.setSourceName(cursor.getString(5));
+            transactionHistory.setDate(cursor.getString(4));
+            transactionHistory.setCategoryTitle(cursor.getString(3));
+            transactionHistory.setTransactionId(cursor.getInt(0));
+            transactionHistory.setUpdDttm(cursor.getString(7));
+        }
+
+        // get m name category
+        Cursor cursorCategory = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, FormUtil.fncNS(transactionHistory.getCategoryTitle()));
+        if (cursorCategory != null && cursorCategory.moveToFirst()) {
+
+            categorySelectedId = cursorCategory.getInt(1);
+            transactionHistory.setCategoryTitle(cursorCategory.getString(3));
+            categoryIconName = FormUtil.fncNS(cursorCategory.getString(4));
+        }
+
+        // Get m name source
+        Cursor cursorSource = databaseHelper.mNameSelectByUk1(SourcePaymentClass.NAME_IDENT_CD, FormUtil.fncNS(transactionHistory.getSourceName()));
+
+        if (cursorSource != null && cursorSource.moveToFirst()) {
+
+            sourceSelectedId = cursorSource.getInt(1);
+            transactionHistory.setSourceName(cursorSource.getString(3));
+            sourceIconName = FormUtil.fncNS(cursorSource.getString(4));
+        }
+
+        // Set view data
+        amount.setText(String.valueOf(transactionHistory.getAmount()));
+        m_name_category.setText(transactionHistory.getCategoryTitle());
+        imageResId = this.getResources().getIdentifier(categoryIconName, "drawable", this.getPackageName());
+        if (imageResId != 0) {
+
+            category_icon.setVisibility(View.VISIBLE);
+            category_icon.setImageResource(imageResId);
+        } else {
+
+            category_icon.setVisibility(View.GONE);
+        }
+        date.setText(transactionHistory.getDate());
+        m_name_source.setText(transactionHistory.getSourceName());
+        imageResId = this.getResources().getIdentifier(sourceIconName, "drawable", this.getPackageName());
+        if (imageResId != 0) {
+
+            source_icon.setVisibility(View.VISIBLE);
+            source_icon.setImageResource(imageResId);
+        } else {
+
+            source_icon.setVisibility(View.GONE);
+        }
+        note.setText(transactionHistory.getNote());
+
+        //Release cursor
+        SqliteUtil.releaseCursor(cursor);
+        SqliteUtil.releaseCursor(cursorCategory);
+        SqliteUtil.releaseCursor(cursorSource);
+    }
+
     private void initTextWatcher() {
 
-        add_expense.setEnabled(false);
+        String amountText = amount.getText().toString().trim();
+        String categoryText = m_name_category.getText().toString();
+        String dateText = date.getText().toString().trim();
+        String sourceText = m_name_source.getText().toString();
+        upd_expense.setEnabled(!amountText.isEmpty() && !categoryText.isEmpty() && !dateText.isEmpty() && !sourceText.isEmpty());
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -146,12 +240,12 @@ public class TransRegisterActivity extends AppCompatActivity {
         String dateText = date.getText().toString().trim();
         String sourceText = m_name_source.getText().toString();
 
-        add_expense.setEnabled(!amountText.isEmpty() && !categoryText.isEmpty() && !dateText.isEmpty() && !sourceText.isEmpty());
+        upd_expense.setEnabled(!amountText.isEmpty() && !categoryText.isEmpty() && !dateText.isEmpty() && !sourceText.isEmpty());
     }
 
     private void showBottomCategoryDialog(String nameIdentCd, Boolean enableCellIcon) {
 
-        final Dialog dialog = new Dialog(TransRegisterActivity.this);
+        final Dialog dialog = new Dialog(TransUpdateActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.m_name_bottom);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
@@ -163,8 +257,8 @@ public class TransRegisterActivity extends AppCompatActivity {
         m_name_title = dialog.findViewById(R.id.m_name_title);
         m_name_title.setText("カテゴリー");
 
-        MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+        MNameAdapter mNameAdapter = new MNameAdapter(TransUpdateActivity.this, TransUpdateActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
+            Toast.makeText(TransUpdateActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
             m_name_category.setText(mName.getNameSs());
             categorySelectedId = Integer.valueOf(mName.getNameCd());
             // Enable icon
@@ -184,7 +278,7 @@ public class TransRegisterActivity extends AppCompatActivity {
         });
 
         m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransRegisterActivity.this, 4);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransUpdateActivity.this, 4);
         m_name_recycler_view.setLayoutManager(layoutManager);
 
         // display dialog
@@ -197,7 +291,7 @@ public class TransRegisterActivity extends AppCompatActivity {
 
     private void showSourceBottomDialog(String nameIdentCd, Boolean enableCellIcon) {
 
-        final Dialog dialog = new Dialog(TransRegisterActivity.this);
+        final Dialog dialog = new Dialog(TransUpdateActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.m_name_bottom);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
@@ -209,8 +303,8 @@ public class TransRegisterActivity extends AppCompatActivity {
         m_name_title = dialog.findViewById(R.id.m_name_title);
         m_name_title.setText("支払い方");
 
-        MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+        MNameAdapter mNameAdapter = new MNameAdapter(TransUpdateActivity.this, TransUpdateActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
+            Toast.makeText(TransUpdateActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
             m_name_source.setText(mName.getNameSs());
             sourceSelectedId = Integer.valueOf(mName.getNameCd());
             // Enable icon
@@ -230,7 +324,7 @@ public class TransRegisterActivity extends AppCompatActivity {
         });
 
         m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransRegisterActivity.this, 4);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransUpdateActivity.this, 4);
         m_name_recycler_view.setLayoutManager(layoutManager);
 
         // display dialog
