@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,8 +23,7 @@ import android.widget.Toast;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.trans_mainte.TransDetailActivity;
-import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
-import com.khanh.expensemanagement.util.DataUtil;
+import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
@@ -87,6 +87,8 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
                 View itemView = viewHolder.itemView;
                 View viewById = itemView.findViewById(R.id.calendar_cell_layout);
                 viewById.setBackgroundResource(R.drawable.calendar_cell_border);
+                TextView cellDayText = itemView.findViewById(R.id.cellDayText);
+                cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.pink));
             }
         });
     }
@@ -240,7 +242,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         // Get category
         transactionHistoryList.forEach(transactionHistory -> {
 
-            Cursor cursorMName = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, DataUtil.fncNS(transactionHistory.getCategoryTitle()));
+            Cursor cursorMName = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, FormUtil.fncNS(transactionHistory.getCategoryTitle()));
 
             if (cursorMName != null && cursorMName.moveToFirst()) {
 
@@ -273,6 +275,8 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     public void onItemClick(int position, String dayText, View view) {
 
         ConstraintLayout cell_layout;
+        TextView cellDayText;
+
         if (!dayText.isEmpty()) {
             if (previousSelectedPosition != position) {
 
@@ -281,14 +285,19 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
                 if (viewHolder != null) {
 
                     View itemView = viewHolder.itemView;
-                    View viewById = itemView.findViewById(R.id.calendar_cell_layout);
-                    viewById.setBackground(null);
+                    cell_layout = itemView.findViewById(R.id.calendar_cell_layout);
+                    cell_layout.setBackground(null);
+                    cellDayText = itemView.findViewById(R.id.cellDayText);
+                    cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
                 }
             }
 
             selectedDate = selectedDate.withDayOfMonth(Integer.valueOf(dayText));
             cell_layout = view.findViewById(R.id.calendar_cell_layout);
             cell_layout.setBackgroundResource(R.drawable.calendar_cell_border);
+            cellDayText = view.findViewById(R.id.cellDayText);
+            cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.pink));
+
             // display Transaction history
             getDataTransactionList();
             // set previous position

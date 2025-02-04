@@ -115,6 +115,7 @@ public class TransRegisterActivity extends AppCompatActivity {
             // Back to home
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 

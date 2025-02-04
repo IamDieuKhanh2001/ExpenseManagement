@@ -3,7 +3,6 @@ package com.khanh.expensemanagement.trans_mainte;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,15 +12,12 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.home.TransactionHistory;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
-import com.khanh.expensemanagement.util.DataUtil;
+import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.util.db.DatabaseHelper;
 
@@ -80,7 +76,23 @@ public class TransDetailActivity extends AppCompatActivity {
         transaction_id_tv = findViewById(R.id.transaction_id_tv);
         last_upd_dttm_tv = findViewById(R.id.last_upd_dttm_tv);
         del_btn = findViewById(R.id.del_btn);
+        del_btn.setOnClickListener(view -> {
+
+            String dialogTitle = "Delete expense";
+            String dialogMessage = "Deleted transactions can not be recovered";
+            FormUtil.openConfirmDialog(this, dialogTitle, dialogMessage, () -> {
+
+                Intent intent = getIntent();
+                Integer transactionId = intent.getIntExtra("transactionId", -1);
+                databaseHelper.deleteTransactionById(transactionId);
+                finish();
+            });
+        });
         edit_btn = findViewById(R.id.edit_btn);
+        edit_btn.setOnClickListener(view -> {
+
+
+        });
     }
 
     private void getDataTransactionDetail() {
@@ -109,21 +121,21 @@ public class TransDetailActivity extends AppCompatActivity {
         }
 
         // get m name category
-        Cursor cursorCategory = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, DataUtil.fncNS(transactionHistory.getCategoryTitle()));
+        Cursor cursorCategory = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, FormUtil.fncNS(transactionHistory.getCategoryTitle()));
 
         if (cursorCategory != null && cursorCategory.moveToFirst()) {
 
             transactionHistory.setCategoryTitle(cursorCategory.getString(3));
-            categoryIconName = DataUtil.fncNS(cursorCategory.getString(4));
+            categoryIconName = FormUtil.fncNS(cursorCategory.getString(4));
         }
 
         // Get m name source
-        Cursor cursorSource = databaseHelper.mNameSelectByUk1(SourcePaymentClass.NAME_IDENT_CD, DataUtil.fncNS(transactionHistory.getSourceName()));
+        Cursor cursorSource = databaseHelper.mNameSelectByUk1(SourcePaymentClass.NAME_IDENT_CD, FormUtil.fncNS(transactionHistory.getSourceName()));
 
         if (cursorSource != null && cursorSource.moveToFirst()) {
 
             transactionHistory.setSourceName(cursorSource.getString(3));
-            sourceIconName = DataUtil.fncNS(cursorSource.getString(4));
+            sourceIconName = FormUtil.fncNS(cursorSource.getString(4));
         }
 
         // Set view data
