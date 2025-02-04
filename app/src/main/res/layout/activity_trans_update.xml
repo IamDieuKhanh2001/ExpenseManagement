@@ -16,9 +16,10 @@
         <EditText
             android:id="@+id/amount"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="Amout*"
+            android:maxLength="9"
             android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="26dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -40,7 +41,7 @@
             <EditText
                 android:id="@+id/m_name_category"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:allowClickWhenDisabled="true"
                 android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
                 android:ems="10"
@@ -53,7 +54,7 @@
         <EditText
             android:id="@+id/date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="26dp"
             android:drawableRight="@drawable/baseline_date_range_24"
             android:ems="10"
@@ -65,7 +66,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="26dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -80,7 +81,7 @@
             <EditText
                 android:id="@+id/m_name_source"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
                 android:ems="10"
                 android:hint="Source of fund"
@@ -92,10 +93,11 @@
         <EditText
             android:id="@+id/note"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="26dp"
             android:ems="10"
             android:hint="Note"
+            android:maxLength="70"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

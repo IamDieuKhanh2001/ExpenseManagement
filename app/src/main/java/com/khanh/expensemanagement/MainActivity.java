@@ -3,10 +3,8 @@ package com.khanh.expensemanagement;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.khanh.expensemanagement.exception.CustomExceptionHandler;
 
 public class MainActivity extends BaseActivity {
 
@@ -15,5 +13,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         getLayoutInflater().inflate(R.layout.activity_main, findViewById(R.id.frame_layout));
+
+        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
     }
 }
