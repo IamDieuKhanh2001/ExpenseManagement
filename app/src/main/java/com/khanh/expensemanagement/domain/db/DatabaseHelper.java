@@ -99,8 +99,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (8,'categoryKbn','4','カテゴリー','',4,'勉強','勉強',NULL,'2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (9,'categoryKbn','5','カテゴリー','',5,'買い物','買い物',NULL,'2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (10,'categoryKbn','6','カテゴリー','',6,'エンターテインメント','エンターテインメント',NULL,'2025-02-01','2025-02-01');",
-
-                "INSERT INTO " + TABLE_BUDGET + " (\"limit_amount\",\"category_id\",\"ins_dttm\",\"upd_dttm\") VALUES (50000,-9,'2025-02-10 15:00:00','2025-02-10 15:00:00');"
         };
 
         for (String query : seederQueries) {
