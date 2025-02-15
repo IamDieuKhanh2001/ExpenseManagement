@@ -22,13 +22,9 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.home.TransactionHistory;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
@@ -38,7 +34,7 @@ import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
-import com.khanh.expensemanagement.util.db.DatabaseHelper;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
 public class TransUpdateActivity extends AppCompatActivity {
 

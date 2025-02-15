@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
-import com.khanh.expensemanagement.util.db.DatabaseHelper;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
 import java.util.ArrayList;
 

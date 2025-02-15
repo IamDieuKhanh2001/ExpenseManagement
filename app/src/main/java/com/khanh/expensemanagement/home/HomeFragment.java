@@ -25,7 +25,7 @@ import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.trans_mainte.TransDetailActivity;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
-import com.khanh.expensemanagement.util.db.DatabaseHelper;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -167,6 +167,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         getDataAmount();
 
         monthYearText.setText(monthYearFromDate(selectedDate));
+
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         // Set data for recyclerView

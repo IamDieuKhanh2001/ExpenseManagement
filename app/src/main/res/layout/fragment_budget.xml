@@ -37,7 +37,7 @@
                 android:textSize="17sp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/add_budget_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -53,6 +53,7 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_total_budget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -110,7 +111,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/over_spent_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/baseline_local_fire_department_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.267" />
+
+                <TextView
+                    android:id="@+id/remaining_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="112dp"
@@ -124,7 +136,7 @@
                     app:layout_constraintVertical_bias="0.034" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/remaining_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="999.999.999.999 円"
@@ -168,7 +180,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="Spend" />
+                                android:text="spent" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -182,6 +194,7 @@
                         <TableRow>
 
                             <TextView
+                                android:id="@+id/spent"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -189,6 +202,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/budget"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"

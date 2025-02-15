@@ -54,7 +54,7 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/limit"
+                android:id="@+id/limit_amount"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
@@ -66,7 +66,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/create_budget"
+            android:id="@+id/create_budget_btn"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="44dp"

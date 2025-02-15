@@ -1,7 +1,5 @@
 package com.khanh.expensemanagement;
 
-import android.os.Environment;
-
 public class ApplicationProperties {
 
     // Database name

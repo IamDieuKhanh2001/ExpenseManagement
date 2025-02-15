@@ -17,7 +17,7 @@ public class SemiCircularProgressBar extends View {
     private Paint backgroundPaint;
     private float progress = 0; // Tiến trình từ 0 đến 100
     private float maxProgress = 100;
-    private float arcWidth = 100; // Độ dày của đường cong
+    private float arcWidth = 140; // Độ dày của đường cong
 
     public SemiCircularProgressBar(Context context) {
         super(context);

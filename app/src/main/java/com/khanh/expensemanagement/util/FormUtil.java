@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 public class FormUtil {
 
     public static String fncNS(String prmValue) {
@@ -12,6 +15,29 @@ public class FormUtil {
             return " ";
         }
         return prmValue;
+    }
+
+    public static String fncDecFormat(String number) {
+
+        if (fncIsNumeric(number)) {
+            try {
+
+                Number num = Double.parseDouble(number);
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+                symbols.setGroupingSeparator('.');
+                DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+
+                return formatter.format(num);
+            } catch (NumberFormatException e) {
+
+                return number;
+            }
+        }
+        return number;
+    }
+
+    public static boolean fncIsNumeric(String str) {
+        return str != null && str.matches("-?\\d+(\\.\\d+)?");
     }
 
     public static void openConfirmDialog(Context context, String title, String message, Runnable onConfirm) {

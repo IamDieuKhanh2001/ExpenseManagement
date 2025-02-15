@@ -31,7 +31,7 @@ import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.m_name.view.MNameAdapter;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.DateTimeUtil;
-import com.khanh.expensemanagement.util.db.DatabaseHelper;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
 public class TransRegisterActivity extends AppCompatActivity {
 

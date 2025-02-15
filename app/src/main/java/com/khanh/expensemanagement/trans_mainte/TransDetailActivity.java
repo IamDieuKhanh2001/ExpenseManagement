@@ -2,12 +2,9 @@ package com.khanh.expensemanagement.trans_mainte;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +20,7 @@ import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
-import com.khanh.expensemanagement.util.db.DatabaseHelper;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
 public class TransDetailActivity extends AppCompatActivity {
 

@@ -1,25 +1,28 @@
-package com.khanh.expensemanagement.util.db;
+package com.khanh.expensemanagement.domain.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.khanh.expensemanagement.ApplicationProperties;
 import com.khanh.expensemanagement.util.DateTimeUtil;
+import com.khanh.expensemanagement.util.db.SqlParamsUtil;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private final Context context;
     private final String TABLE_TRANSACTION = "transactions";
     private final String TABLE_M_NAME = "m_name";
+    private final String TABLE_BUDGET = "budgets";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, ApplicationProperties.DATABASE_NAME, null, ApplicationProperties.DATABASE_VERSION);
@@ -57,8 +60,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "CONSTRAINT m_name_index1 UNIQUE (name_ident_cd, name_cd)" +
                 ");";
 
+        String queryCreateBudget = "CREATE TABLE " + TABLE_BUDGET +
+                " (" +
+                "id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "limit_amount" + " INTEGER NOT NULL DEFAULT 1000, " +
+                "category_id" + " INTEGER UNIQUE, " +
+                "ins_dttm" + " TEXT, " +
+                "upd_dttm" + " TEXT " +
+                ");";
+
         sqLiteDatabase.execSQL(queryCreateTransaction);
         sqLiteDatabase.execSQL(queryCreateMName);
+        sqLiteDatabase.execSQL(queryCreateBudget);
 
         createSeedData(sqLiteDatabase);
     }
@@ -67,6 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_M_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_BUDGET);
         onCreate(sqLiteDatabase);
     }
 
@@ -85,6 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (8,'categoryKbn','4','カテゴリー','',4,'勉強','勉強',NULL,'2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (9,'categoryKbn','5','カテゴリー','',5,'買い物','買い物',NULL,'2025-02-01','2025-02-01');",
                 "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (10,'categoryKbn','6','カテゴリー','',6,'エンターテインメント','エンターテインメント',NULL,'2025-02-01','2025-02-01');",
+
+                "INSERT INTO " + TABLE_BUDGET + " (\"limit_amount\",\"category_id\",\"ins_dttm\",\"upd_dttm\") VALUES (50000,-9,'2025-02-10 15:00:00','2025-02-10 15:00:00');"
         };
 
         for (String query : seederQueries) {
@@ -121,6 +137,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor budgetTotalSpendingMonth() {
+
+        // -99 is total spending month (-99 not in m name)
+        return budgetFindByCategoryId(-99);
+    }
+
+    public Cursor budgetFindByCategoryId(Integer categoryId) {
+
+        String query = "SELECT " + "limit_amount, category_id, ins_dttm, upd_dttm" +
+                " FROM " + TABLE_BUDGET +
+                " WHERE category_id IS ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(categoryId)});
+        }
+        return cursor;
+    }
+
     public Cursor transactionFindAll() {
         String query = "SELECT " + "*"
                 + " FROM " + TABLE_TRANSACTION;
@@ -142,9 +178,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = null;
         if (db != null) {
+
             cursor = db.rawQuery(query, new String[]{String.valueOf(date)});
         }
         return cursor;
+    }
+
+    public BigInteger transactionTotalSpentOnMonth(YearMonth yearMonth) {
+
+        BigInteger totalSpent = BigInteger.valueOf(0);
+        String query = "SELECT " + "COALESCE(SUM(amount), 0) AS total_spent" +
+                " FROM " + TABLE_TRANSACTION +
+                " WHERE transaction_dt LIKE ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+
+            cursor = db.rawQuery(query, new String[]{SqlParamsUtil.forward(yearMonth.toString())});
+        }
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            totalSpent = BigInteger.valueOf(cursor.getInt(0));
+        }
+        return totalSpent;
     }
 
     public Cursor transactionFindById(Integer id) {

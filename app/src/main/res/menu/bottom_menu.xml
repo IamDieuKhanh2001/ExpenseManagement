@@ -18,11 +18,11 @@
 
     <item
         android:id="@+id/subscriptions"
-        android:title="Subscriptions"
+        android:title="tab3"
         android:icon="@drawable/baseline_cast_connected_24" />
     <item
         android:id="@+id/library"
-        android:title="Library"
+        android:title="tab4"
         android:icon="@drawable/baseline_cast_connected_24" />
 
 </menu>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ExpenseManagement</string>
-    <string name="back"><![CDATA[<-]]></string>
-    <string name="forward"><![CDATA[->]]></string>
     <string name="transaction_history_title">Transactions on %1$s</string>
     <string name="transaction_amount_currency">%1$s 円</string>
+    <string name="over_spent">Overspent</string>
+    <string name="remaining">Remaining</string>
 </resources>
