@@ -253,7 +253,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
         TransactionAdapter transactionAdapter = new TransactionAdapter(requireContext(), getActivity(), transactionHistoryList, (position, transactionHistory, view) -> {
 
-            Toast.makeText(getContext(), "Clicked: " + transactionHistory.getTransactionId(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(view.getContext(), TransDetailActivity.class);
             intent.putExtra("transactionId", transactionHistory.getTransactionId());
             startActivity(intent);

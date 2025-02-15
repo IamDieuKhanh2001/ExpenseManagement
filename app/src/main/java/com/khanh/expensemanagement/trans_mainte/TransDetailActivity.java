@@ -143,7 +143,7 @@ public class TransDetailActivity extends AppCompatActivity {
         }
 
         // Set view data
-        amount_tv.setText(getString(R.string.transaction_amount_currency, transactionHistory.getAmount().toString()));
+        amount_tv.setText(getString(R.string.transaction_amount_currency, FormUtil.fncDecFormat(transactionHistory.getAmount().toString())));
         if (!transactionHistory.getNote().isEmpty()) {
 
             note_tv.setText(transactionHistory.getNote());

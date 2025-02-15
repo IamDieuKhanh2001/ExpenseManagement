@@ -1,21 +1,28 @@
 package com.khanh.expensemanagement.budget;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.budget_mainte.BudgetRegisterActivity;
+import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
@@ -31,6 +38,7 @@ public class BudgetFragment extends Fragment {
     private final String FRAGMENT_TITLE = "Budget";
 
     Button add_budget_btn;
+    Button more_button;
     SemiCircularProgressBar progressBar;
     TextView remaining_amount;
     TextView remaining_title;
@@ -84,6 +92,11 @@ public class BudgetFragment extends Fragment {
         card_total_budget = view.findViewById(R.id.card_total_budget);
         spent = view.findViewById(R.id.spent);
         budget = view.findViewById(R.id.budget);
+        more_button = view.findViewById(R.id.more_button);
+        more_button.setOnClickListener(buttonView -> {
+
+            showMoreBottomDialog();
+        });
     }
 
     private void getDataDisplay() {
@@ -133,7 +146,7 @@ public class BudgetFragment extends Fragment {
             remaining_amount.setText(getString(R.string.transaction_amount_currency, remainingAmountText));
 
             // set circular progress bar
-            if (limitAmount.compareTo(totalSpent) < 0) {
+            if (limitAmount.compareTo(totalSpent) < 0 || limitAmount.signum() != 1) {
 
                 progressBar.setProgress(0);
             } else {
@@ -148,5 +161,34 @@ public class BudgetFragment extends Fragment {
 
             card_total_budget.setVisibility(View.GONE);
         }
+    }
+
+    private void showMoreBottomDialog() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.budget_more_bottom);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+        TextView del_btn = dialog.findViewById(R.id.del_btn);
+        del_btn.setOnClickListener(view -> {
+
+            dialog.dismiss();
+            String dialogTitle = "Delete budget";
+            String dialogMessage = "Deleted budget can not be recovered";
+            FormUtil.openConfirmDialog(getContext(), dialogTitle, dialogMessage, () -> {
+
+                databaseHelper.deleteBudgetTotalSpendingMonth();
+                FragmentUtil.replaceFragment(getActivity().getSupportFragmentManager(), new BudgetFragment());
+            });
+        });
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        // display dialog
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 }

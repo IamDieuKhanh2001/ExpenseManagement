@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.util.FormUtil;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
             holder.transaction_title_tv.setText(String.format("%sでの出費", transactionHistoryList.get(position).getCategoryTitle()));
         }
         holder.category_tv.setText(transactionHistoryList.get(position).getCategoryTitle());
-        holder.transaction_up.setText(String.valueOf(transactionHistoryList.get(position).getAmount()));
+        String amountText = String.valueOf(transactionHistoryList.get(position).getAmount());
+        amountText = FormUtil.fncDecFormat(amountText);
+        holder.transaction_up.setText(context.getString(R.string.transaction_amount_currency, amountText));
     }
 
     @Override

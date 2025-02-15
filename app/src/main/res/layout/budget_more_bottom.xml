@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="M name title"
+            android:text="Edit"
             android:padding="8dp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -41,10 +41,36 @@
             android:textSize="20dp" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/m_name_recycler_view"
-        android:scrollbars="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/edit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="Edit budget"
+            android:drawableStart="@drawable/baseline_edit_24"
+            android:drawablePadding="15dp"
+            android:textColor="@color/gray"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/del_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="Delete budget"
+            android:drawableStart="@drawable/baseline_delete_outline_24"
+            android:drawablePadding="15dp"
+            android:textColor="@color/gray"
+            android:layout_marginTop="10dp"
+            android:textSize="20dp" />
+    </LinearLayout>
 
 </LinearLayout>

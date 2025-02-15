@@ -175,6 +175,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteBudgetTotalSpendingMonth() {
+
+        deleteBudgetByCategoryId(-99);
+    }
+
+    public void deleteBudgetByCategoryId(Integer categoryId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_BUDGET, "category_id=?", new String[]{categoryId.toString()});
+        if(result == -1){
+            Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public Cursor transactionFindAll() {
         String query = "SELECT " + "*"
                 + " FROM " + TABLE_TRANSACTION;

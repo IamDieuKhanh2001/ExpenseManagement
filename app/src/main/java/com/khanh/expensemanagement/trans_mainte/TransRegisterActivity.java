@@ -164,7 +164,7 @@ public class TransRegisterActivity extends AppCompatActivity {
         m_name_title.setText("カテゴリー");
 
         MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+
             m_name_category.setText(mName.getNameSs());
             categorySelectedId = Integer.valueOf(mName.getNameCd());
             // Enable icon
@@ -210,7 +210,7 @@ public class TransRegisterActivity extends AppCompatActivity {
         m_name_title.setText("支払い方");
 
         MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(TransRegisterActivity.this, "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
+
             m_name_source.setText(mName.getNameSs());
             sourceSelectedId = Integer.valueOf(mName.getNameCd());
             // Enable icon
