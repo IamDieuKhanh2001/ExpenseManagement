@@ -1,5 +1,6 @@
 package com.khanh.expensemanagement.budget;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -10,9 +11,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.budget_mainte.BudgetRegisterActivity;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
@@ -27,6 +30,7 @@ public class BudgetFragment extends Fragment {
 
     private final String FRAGMENT_TITLE = "Budget";
 
+    Button add_budget_btn;
     SemiCircularProgressBar progressBar;
     TextView remaining_amount;
     TextView remaining_title;
@@ -67,6 +71,12 @@ public class BudgetFragment extends Fragment {
 
     private void initWidgets(View view) {
 
+        add_budget_btn = view.findViewById(R.id.add_budget_btn);
+        add_budget_btn.setOnClickListener(buttonView -> {
+
+            Intent budgetRegisterIntent = new Intent(buttonView.getContext(), BudgetRegisterActivity.class);
+            startActivity(budgetRegisterIntent);
+        });
         remaining_amount = view.findViewById(R.id.remaining_amount);
         remaining_title = view.findViewById(R.id.remaining_title);
         over_spent_icon = view.findViewById(R.id.over_spent_icon);

@@ -157,6 +157,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public void registerBudget(Integer limitAmount, Integer categoryId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("limit_amount", limitAmount);
+        cv.put("category_id", categoryId);
+        cv.put("ins_dttm", DateTimeUtil.getCurrentDateTime());
+        cv.put("upd_dttm", DateTimeUtil.getCurrentDateTime());
+
+        long result = db.insert(TABLE_BUDGET, null, cv);
+        if (result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public Cursor transactionFindAll() {
         String query = "SELECT " + "*"
                 + " FROM " + TABLE_TRANSACTION;

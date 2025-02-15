@@ -3,6 +3,7 @@ package com.khanh.expensemanagement;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
 import com.khanh.expensemanagement.naiji.NaijiFragment;
 import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
+import com.khanh.expensemanagement.util.FragmentUtil;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -30,39 +32,57 @@ public class BaseActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
 
-        replaceFragment(new HomeFragment());
+        FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
             if (item.getItemId() == R.id.home) {
-                replaceFragment(new HomeFragment());
+
+                FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
             } else if (item.getItemId() == R.id.budget) {
-                replaceFragment(new BudgetFragment());
+
+                FragmentUtil.replaceFragment(getSupportFragmentManager(), new BudgetFragment());
             } else if (item.getItemId() == R.id.subscriptions) {
-                replaceFragment(new NaijiFragment());
+
+                FragmentUtil.replaceFragment(getSupportFragmentManager(), new NaijiFragment());
             } else if (item.getItemId() == R.id.library) {
-//                replaceFragment(new LibraryFragment());
+
             }
 
             return true;
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), TransRegisterActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), TransRegisterActivity.class);
+            startActivity(intent);
         });
     }
 
+    @Override
+    protected void onResume() {
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
+        super.onResume();
+        String onStartfragmentName;
+        // get on start fragment on main
+        if (getIntent().getStringExtra("onStartFragmentName") != null) {
+
+            onStartfragmentName = getIntent().getStringExtra("onStartFragmentName");
+            switch (onStartfragmentName) {
+
+                case "BudgetFragment": {
+
+                    bottomNavigationView.setSelectedItemId(R.id.budget);
+                    FragmentUtil.replaceFragment(getSupportFragmentManager(), new BudgetFragment());
+                    break;
+                }
+                default: {
+
+                    bottomNavigationView.setSelectedItemId(R.id.home);
+                    FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
+                }
+            }
+        }
     }
 
 }
