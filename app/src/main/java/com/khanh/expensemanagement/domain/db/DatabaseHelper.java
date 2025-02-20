@@ -173,6 +173,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void updateBudget(Integer limitAmount, Integer categoryId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("limit_amount", limitAmount);
+        cv.put("ins_dttm", DateTimeUtil.getCurrentDateTime());
+        cv.put("upd_dttm", DateTimeUtil.getCurrentDateTime());
+
+        long result = db.update(TABLE_BUDGET, cv, "category_id=?", new String[]{categoryId.toString()});
+
+        if (result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Edit Successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void deleteBudgetTotalSpendingMonth() {
 
         deleteBudgetByCategoryId(-99);

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.budget_mainte.BudgetRegisterActivity;
+import com.khanh.expensemanagement.budget_mainte.BudgetUpdateActivity;
 import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
@@ -168,7 +169,18 @@ public class BudgetFragment extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.budget_more_bottom);
+
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        TextView edit_btn = dialog.findViewById(R.id.edit_btn);
+        edit_btn.setOnClickListener(view -> {
+
+            dialog.dismiss();
+            Intent intent = new Intent(view.getContext(), BudgetUpdateActivity.class);
+            startActivity(intent);
+        });
+
         TextView del_btn = dialog.findViewById(R.id.del_btn);
         del_btn.setOnClickListener(view -> {
 
@@ -182,7 +194,6 @@ public class BudgetFragment extends Fragment {
             });
         });
 
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
 
         // display dialog
         dialog.show();
