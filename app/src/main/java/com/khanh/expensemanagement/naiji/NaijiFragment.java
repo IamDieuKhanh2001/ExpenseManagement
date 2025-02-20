@@ -86,86 +86,8 @@ public class NaijiFragment extends Fragment {
     }
 
     private void initWidgets(View view) {
-        m_name_source = view.findViewById(R.id.m_name_source);
-        m_name_source.setFocusable(false);
-        m_name_source.setClickable(true);
-        m_name_source.setOnClickListener(view_m_name -> {
 
-            showBottomDialog(SourcePaymentClass.NAME_IDENT_CD, true);
-        });
 
-        m_name_category = view.findViewById(R.id.m_name_category);
-        m_name_category.setFocusable(false);
-        m_name_category.setClickable(true);
-        m_name_category.setOnClickListener(view_m_name -> {
-
-            showBottomCategoryDialog(CategoryClass.NAME_IDENT_CD, false);
-        });
     }
 
-    private void showBottomCategoryDialog(String nameIdentCd, Boolean enableCellIcon) {
-
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.m_name_bottom);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
-
-        // add data dialog
-        m_name_recycler_view = dialog.findViewById(R.id.m_name_recycler_view);
-        m_name_title = dialog.findViewById(R.id.m_name_title);
-        m_name_title.setText("カテゴリー");
-
-        MNameAdapter mNameAdapter = new MNameAdapter(getContext(), getActivity(), nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(getContext(), "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
-            m_name_category.setText(mName.getNameSs());
-
-            dialog.dismiss(); // close dialog
-        });
-
-        m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 4);
-        m_name_recycler_view.setLayoutManager(layoutManager);
-
-        // display dialog
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
-
-    private void showBottomDialog(String nameIdentCd, Boolean enableCellIcon) {
-
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.m_name_bottom);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
-
-        // add data dialog
-        m_name_recycler_view = dialog.findViewById(R.id.m_name_recycler_view);
-        m_name_title = dialog.findViewById(R.id.m_name_title);
-        m_name_title.setText("支払い方");
-
-        MNameAdapter mNameAdapter = new MNameAdapter(getContext(), getActivity(), nameIdentCd, enableCellIcon, (position, mName, view) -> {
-            Toast.makeText(getContext(), "Clicked: " + mName.getNameCd(), Toast.LENGTH_SHORT).show();
-            m_name_source.setText(mName.getNameSs());
-
-            dialog.dismiss(); // close dialog
-        });
-
-        m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 4);
-        m_name_recycler_view.setLayoutManager(layoutManager);
-
-        // display dialog
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
 }
