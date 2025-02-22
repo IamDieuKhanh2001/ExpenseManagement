@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">経費管理</string>
+    <string name="transaction_history_title">%1$sの取引</string>
+    <string name="transaction_amount_currency">%1$s 円</string>
+    <string name="over_spent">予算オーバー</string>
+    <string name="remaining">残り</string>
+</resources>

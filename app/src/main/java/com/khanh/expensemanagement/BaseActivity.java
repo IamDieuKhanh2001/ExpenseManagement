@@ -1,7 +1,11 @@
 package com.khanh.expensemanagement;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -15,8 +19,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
 import com.khanh.expensemanagement.naiji.NaijiFragment;
+import com.khanh.expensemanagement.settings.SettingsFragment;
 import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.FragmentUtil;
+
+import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -46,8 +53,9 @@ public class BaseActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.subscriptions) {
 
                 FragmentUtil.replaceFragment(getSupportFragmentManager(), new NaijiFragment());
-            } else if (item.getItemId() == R.id.library) {
+            } else if (item.getItemId() == R.id.settings) {
 
+                FragmentUtil.replaceFragment(getSupportFragmentManager(), new SettingsFragment());
             }
 
             return true;
@@ -82,6 +90,7 @@ public class BaseActivity extends AppCompatActivity {
                     FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
                 }
             }
+            getIntent().removeExtra("onStartFragmentName");
         }
     }
 
