@@ -15,8 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/amount"
@@ -24,37 +24,20 @@
                 android:layout_height="50dp"
                 android:ems="10"
                 android:hint="Amout*"
-                android:maxLength="9"
                 android:inputType="number"
+                android:maxLength="9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <com.khanh.expensemanagement.component.CustomSelectBox
+                android:id="@+id/m_name_category"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="26dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/category_icon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="5dp"
-                    app:srcCompat="@drawable/ic_category_food" />
-                <EditText
-                    android:id="@+id/m_name_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:allowClickWhenDisabled="true"
-                    android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
-                    android:ems="10"
-                    android:hint="Category*"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                app:enableCellIcon="true"
+                app:isRequired="true"
+                app:nameIdentCd="categoryKbn"
+                app:title="Category" />
 
             <EditText
                 android:id="@+id/date"
@@ -69,31 +52,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <com.khanh.expensemanagement.component.CustomSelectBox
+                android:id="@+id/m_name_source"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="26dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/source_icon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="5dp"
-                    app:srcCompat="@drawable/ic_source_cash" />
-
-                <EditText
-                    android:id="@+id/m_name_source"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
-                    android:ems="10"
-                    android:hint="Source of fund"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                app:enableCellIcon="true"
+                app:isRequired="true"
+                app:nameIdentCd="sourcePaymentKbn"
+                app:title="Source of fund" />
 
             <EditText
                 android:id="@+id/note"
@@ -113,6 +79,7 @@
             android:id="@+id/upd_expense"
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="44dp"
             android:text="Edit"
             android:textAllCaps="false"
@@ -121,8 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
-            android:layout_alignParentBottom="true"/>
+            app:layout_constraintTop_toBottomOf="parent" />
 
     </RelativeLayout>
 </FrameLayout>

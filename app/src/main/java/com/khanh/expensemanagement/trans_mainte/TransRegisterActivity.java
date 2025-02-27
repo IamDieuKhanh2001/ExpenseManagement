@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.component.CustomSelectBox;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.m_name.view.MNameAdapter;
@@ -38,19 +40,12 @@ public class TransRegisterActivity extends AppCompatActivity {
     private final String ACTIVITY_TITLE = "Add expense";
 
     EditText amount;
-    EditText m_name_category;
+    CustomSelectBox m_name_category;
     EditText date;
-    EditText m_name_source;
+    CustomSelectBox m_name_source;
     EditText note;
     Button add_expense;
-    ImageView category_icon;
-    ImageView source_icon;
     DatabaseHelper databaseHelper;
-    RecyclerView m_name_recycler_view;
-    TextView m_name_title;
-
-    Integer categorySelectedId;
-    Integer sourceSelectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +72,8 @@ public class TransRegisterActivity extends AppCompatActivity {
     private void initWidgets() {
 
         amount = findViewById(R.id.amount);
-
         m_name_category = findViewById(R.id.m_name_category);
-        m_name_category.setFocusable(false);
-        m_name_category.setClickable(true);
-        m_name_category.setOnClickListener(view -> {
-            showBottomCategoryDialog(CategoryClass.NAME_IDENT_CD, true);
-        });
-
-        category_icon = findViewById(R.id.category_icon);
-        category_icon.setVisibility(View.GONE);
-
+        m_name_category.setNameIdentCd(CategoryClass.NAME_IDENT_CD);
         date = findViewById(R.id.date);
         date.setFocusable(false);
         date.setClickable(true);
@@ -95,20 +81,13 @@ public class TransRegisterActivity extends AppCompatActivity {
 
             DateTimeUtil.showDatePicker(TransRegisterActivity.this, (EditText) view); // Open date picker dialog
         });
-
         m_name_source = findViewById(R.id.m_name_source);
-        m_name_source.setFocusable(false);
-        m_name_source.setClickable(true);
-        m_name_source.setOnClickListener(view -> showSourceBottomDialog(SourcePaymentClass.NAME_IDENT_CD, true));
-
-        source_icon = findViewById(R.id.source_icon);
-        source_icon.setVisibility(View.GONE);
-
+        m_name_source.setNameIdentCd(SourcePaymentClass.NAME_IDENT_CD);
         note = findViewById(R.id.note);
 
         add_expense = findViewById(R.id.add_expense);
         add_expense.setOnClickListener(view -> {
-            databaseHelper.registerTransaction(Integer.valueOf(amount.getText().toString()), note.getText().toString(), categorySelectedId, date.getText().toString(), sourceSelectedId);
+            databaseHelper.registerTransaction(Integer.valueOf(amount.getText().toString()), note.getText().toString(), m_name_category.getSelectedId(), date.getText().toString(), m_name_source.getSelectedId());
             // Back to home
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -142,102 +121,10 @@ public class TransRegisterActivity extends AppCompatActivity {
     private void dataErrorCheck() {
 
         String amountText = amount.getText().toString().trim();
-        String categoryText = m_name_category.getText().toString();
+        Integer categoryId = m_name_category.getSelectedId();
         String dateText = date.getText().toString().trim();
-        String sourceText = m_name_source.getText().toString();
+        Integer sourceId = m_name_source.getSelectedId();
 
-        add_expense.setEnabled(!amountText.isEmpty() && !categoryText.isEmpty() && !dateText.isEmpty() && !sourceText.isEmpty());
-    }
-
-    private void showBottomCategoryDialog(String nameIdentCd, Boolean enableCellIcon) {
-
-        final Dialog dialog = new Dialog(TransRegisterActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.m_name_bottom);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
-
-        // add data dialog
-        m_name_recycler_view = dialog.findViewById(R.id.m_name_recycler_view);
-        m_name_title = dialog.findViewById(R.id.m_name_title);
-        m_name_title.setText("カテゴリー");
-
-        MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-
-            m_name_category.setText(mName.getNameSs());
-            categorySelectedId = Integer.valueOf(mName.getNameCd());
-            // Enable icon
-            category_icon.setVisibility(View.VISIBLE);
-            if (mName.getDrawableIconUrl() != null) {
-
-                int imageResId = this.getResources().getIdentifier(mName.getDrawableIconUrl(), "drawable", this.getPackageName());
-                if (imageResId != 0) {
-
-                    category_icon.setImageResource(imageResId);
-                }
-            } else {
-
-                category_icon.setImageResource(R.drawable.ic_no_image);
-            }
-            dialog.dismiss(); // close dialog
-        });
-
-        m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransRegisterActivity.this, 4);
-        m_name_recycler_view.setLayoutManager(layoutManager);
-
-        // display dialog
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
-
-    private void showSourceBottomDialog(String nameIdentCd, Boolean enableCellIcon) {
-
-        final Dialog dialog = new Dialog(TransRegisterActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.m_name_bottom);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
-
-        // add data dialog
-        m_name_recycler_view = dialog.findViewById(R.id.m_name_recycler_view);
-        m_name_title = dialog.findViewById(R.id.m_name_title);
-        m_name_title.setText("支払い方");
-
-        MNameAdapter mNameAdapter = new MNameAdapter(TransRegisterActivity.this, TransRegisterActivity.this, nameIdentCd, enableCellIcon, (position, mName, view) -> {
-
-            m_name_source.setText(mName.getNameSs());
-            sourceSelectedId = Integer.valueOf(mName.getNameCd());
-            // Enable icon
-            source_icon.setVisibility(View.VISIBLE);
-            if (mName.getDrawableIconUrl() != null) {
-
-                int imageResId = this.getResources().getIdentifier(mName.getDrawableIconUrl(), "drawable", this.getPackageName());
-                if (imageResId != 0) {
-
-                    source_icon.setImageResource(imageResId);
-                }
-            } else {
-
-                source_icon.setImageResource(R.drawable.ic_no_image);
-            }
-            dialog.dismiss(); // close dialog
-        });
-
-        m_name_recycler_view.setAdapter(mNameAdapter);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(TransRegisterActivity.this, 4);
-        m_name_recycler_view.setLayoutManager(layoutManager);
-
-        // display dialog
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        add_expense.setEnabled(!amountText.isEmpty() && categoryId != null && !dateText.isEmpty() && sourceId != null);
     }
 }

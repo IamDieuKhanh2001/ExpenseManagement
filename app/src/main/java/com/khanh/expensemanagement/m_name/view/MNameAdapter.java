@@ -18,46 +18,17 @@ import java.util.ArrayList;
 public class MNameAdapter extends RecyclerView.Adapter<MNameViewHolder> {
 
     private Context context;
-    private Activity activity;
-    private String nameIdentCd;
     private Boolean enableIcon;
     private ArrayList<MName> mNameList;
     private final MNameAdapter.OnItemListener onItemListener;
 
     private DatabaseHelper databaseHelper;
 
-    public MNameAdapter(Context context, Activity activity, String nameIdentCd, Boolean enableIcon, OnItemListener onItemListener) {
+    public MNameAdapter(Context context, ArrayList<MName> mNameList, Boolean enableIcon, OnItemListener onItemListener) {
         this.context = context;
-        this.activity = activity;
-        this.nameIdentCd = nameIdentCd;
+        this.mNameList = mNameList;
         this.enableIcon = enableIcon;
-        this.mNameList = getMNameData();
         this.onItemListener = onItemListener;
-    }
-
-    private ArrayList<MName> getMNameData() {
-
-        ArrayList<MName> mNameDataList = new ArrayList<>();
-        databaseHelper = new DatabaseHelper(activity.getApplicationContext());
-        Cursor cursor = databaseHelper.mNameFindAll(nameIdentCd);
-        if (cursor != null && cursor.moveToFirst()) {
-
-            do {
-                MName mName = new MName();
-                mName.setNameIdentCd(cursor.getString(0));
-                mName.setNameCd(cursor.getString(1));
-                mName.setNameIdentName(cursor.getString(2));
-                mName.setNameSs(cursor.getString(3));
-                mName.setDrawableIconUrl(cursor.getString(4));
-                mNameDataList.add(mName);
-            } while (cursor.moveToNext());
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-
-        return mNameDataList;
     }
 
     @NonNull
