@@ -2,9 +2,11 @@ package com.khanh.expensemanagement.naiji;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,10 +21,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.m_name.view.MNameAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +56,8 @@ public class NaijiFragment extends Fragment {
     private EditText m_name_category;
     private RecyclerView m_name_recycler_view;
     private TextView m_name_title;
+
+    private PieChart pieChart;
 
     public NaijiFragment() {
         // Required empty public constructor
@@ -87,6 +101,60 @@ public class NaijiFragment extends Fragment {
 
     private void initWidgets(View view) {
 
+        pieChart = view.findViewById(R.id.pieChart);
+
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(53f, "Food"));
+        entries.add(new PieEntry(36f, "Entertainment"));
+        entries.add(new PieEntry(9f, "Beauty"));
+        entries.add(new PieEntry(20f, "Bills"));
+        entries.add(new PieEntry(30f, "Other"));
+
+        PieDataSet dataSet = new PieDataSet(entries, "Expense Categories");
+        List<Integer> colors = new ArrayList<>();
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorOrange));
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorRed));
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorPink));
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorGreen));
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorBlue));
+        dataSet.setColors(colors);
+        dataSet.setValueTextSize(12f);
+
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+        pieChart.setExtraOffsets(10, 20, 10, 10);
+        pieChart.getDescription().setEnabled(false); // Ẩn description
+        pieChart.setEntryLabelTextSize(14f);
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.animateY(1000); // Animation
+        pieChart.invalidate(); // Refresh chart
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleRadius(45f);
+        pieChart.setTransparentCircleRadius(51f);
+        pieChart.setRotationEnabled(false);
+        pieData.setValueFormatter(new PercentFormatter(pieChart));
+        pieChart.setUsePercentValues(true);
+
+
+//        pieChart.setDrawEntryLabels(true);
+//        // Màu chữ của nhãn (ví dụ: màu đen)
+//        pieChart.setEntryLabelColor(Color.BLACK);
+//
+//        // Kích thước chữ của nhãn (đơn vị: sp)
+//        pieChart.setEntryLabelTextSize(12f);
+//
+//        // Kiểu chữ (tuỳ chọn)
+//        pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD);
+
+        // Hiển thị label (tiêu đề) bên ngoài
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        // Tạo đường dẫn từ label đến biểu đồ (dạng mũi tên)
+        dataSet.setValueLinePart1Length(0.5f); // Độ dài đoạn đầu
+        dataSet.setValueLinePart2Length(0.4f); // Độ dài đoạn sau
+        dataSet.setValueLineWidth(2f); // Độ dày đường
+        dataSet.setValueLineColor(Color.BLACK); // Màu của đường dẫn
 
     }
 
