@@ -129,9 +129,9 @@ public class NaijiFragment extends Fragment {
         entries.add(new PieEntry(36f, "Entertainment"));
         entries.add(new PieEntry(9f, "Beauty"));
         entries.add(new PieEntry(20f, "Bills"));
-        entries.add(new PieEntry(30f, "Other"));
+        entries.add(new PieEntry(1f, "Other"));
 
-        PieDataSet dataSet = new PieDataSet(entries, "Expense Categories");
+        PieDataSet dataSet = new PieDataSet(entries, "");
         List<Integer> colors = new ArrayList<>();
         colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorOrange));
         colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorRed));
@@ -143,7 +143,7 @@ public class NaijiFragment extends Fragment {
 
         PieData pieData = new PieData(dataSet);
         pieChart.setData(pieData);
-        pieChart.setExtraOffsets(10, 20, 10, 10);
+        pieChart.setExtraOffsets(10, 10, 10, 10);
         pieChart.getDescription().setEnabled(false); // Ẩn description
         pieChart.setEntryLabelTextSize(14f);
         pieChart.setEntryLabelColor(Color.BLACK);
