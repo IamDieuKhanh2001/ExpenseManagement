@@ -1,88 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".naiji.NaijiFragment"
-    android:orientation="vertical">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChart"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".naiji.NaijiFragment">
 
-    <TextView
-        android:id="@+id/transaction_history_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="aaaaaa"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold" />
 
-    <android.widget.ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <TableLayout
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChart"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:stretchColumns="1">
+            android:layout_height="300dp" />
 
-            <TableRow>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="5sp"
+            android:paddingTop="5sp"
+            android:paddingRight="5sp">
 
-                <TextView
-                    android:padding="8dp"
-                    android:text="Date"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/date_tv"
-                    android:padding="8dp"
-                    android:text="Yesterday, dd/mm/yyyy"
-                    android:textAlignment="textEnd" />
-            </TableRow>
-
-            <View
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/line_gray" />
+                android:layout_height="wrap_content"
+                android:text="Overview"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <TableRow>
-
-                <TextView
-                    android:padding="8dp"
-                    android:text="Trasaction Id"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/transaction_id_tv"
-                    android:padding="8dp"
-                    android:text="-1"
-                    android:textAlignment="textEnd" />
-            </TableRow>
-
-            <View
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/line_gray" />
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
-            <TableRow>
+    </LinearLayout>
 
-                <TextView
-                    android:padding="8dp"
-                    android:text="Last update at"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/last_upd_dttm_tv"
-                    android:padding="8dp"
-                    android:text="dd/mm/yyyy hh:mm:ss"
-                    android:textAlignment="textEnd" />
-            </TableRow>
-        </TableLayout>
-    </android.widget.ScrollView>/
-
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

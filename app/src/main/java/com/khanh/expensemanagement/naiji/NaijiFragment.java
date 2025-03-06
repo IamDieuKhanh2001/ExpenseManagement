@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Gravity;
@@ -33,6 +34,7 @@ import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.m_name.view.MNameAdapter;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class NaijiFragment extends Fragment {
     private TextView m_name_title;
 
     private PieChart pieChart;
+    private RecyclerView category_recycler_view;
 
     public NaijiFragment() {
         // Required empty public constructor
@@ -100,6 +103,24 @@ public class NaijiFragment extends Fragment {
     }
 
     private void initWidgets(View view) {
+
+        ArrayList<CategoryExpense> categoryExpenses = new ArrayList<>();
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Entertainment", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Beauty", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
+
+        category_recycler_view = view.findViewById(R.id.category_recycler_view);
+        CategoryExpenseAdapter categoryExpenseAdapter = new CategoryExpenseAdapter(requireContext(), getActivity(), categoryExpenses);
+        category_recycler_view.setAdapter(categoryExpenseAdapter);
+        category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         pieChart = view.findViewById(R.id.pieChart);
 
