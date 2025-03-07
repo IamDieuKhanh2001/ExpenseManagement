@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +34,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BudgetFragment extends Fragment {
 
@@ -47,6 +51,7 @@ public class BudgetFragment extends Fragment {
     TextView budget;
     DatabaseHelper databaseHelper;
     CardView card_total_budget;
+    RecyclerView budget_category_recycler_view;
 
     public BudgetFragment() {
         // Required empty public constructor
@@ -97,9 +102,16 @@ public class BudgetFragment extends Fragment {
 
             showMoreBottomDialog();
         });
+        budget_category_recycler_view = view.findViewById(R.id.budget_category_recycler_view);
     }
 
     private void getDataDisplay() {
+
+        getBudgetSpendingMonth();
+        getBudgetByCategory();
+    }
+
+    private void getBudgetSpendingMonth() {
 
         BigInteger limitAmount;
         String limitAmountText;
@@ -161,6 +173,18 @@ public class BudgetFragment extends Fragment {
 
             card_total_budget.setVisibility(View.GONE);
         }
+    }
+
+    private void getBudgetByCategory() {
+
+        List<BudgetCategory> budgetCategoryList = new ArrayList<>();
+        budgetCategoryList.add(new BudgetCategory(1,1,"category test 1"));
+        budgetCategoryList.add(new BudgetCategory(1,1,"category test 2"));
+        budgetCategoryList.add(new BudgetCategory(1,1,"category test 3"));
+        budgetCategoryList.add(new BudgetCategory(1,1,"category test 4"));
+        BudgetCategoryAdapter budgetCategoryAdapter = new BudgetCategoryAdapter(requireContext(), getActivity(), budgetCategoryList);
+        budget_category_recycler_view.setAdapter(budgetCategoryAdapter);
+        budget_category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void showMoreBottomDialog() {

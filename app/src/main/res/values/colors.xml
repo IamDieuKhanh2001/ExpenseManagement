@@ -10,6 +10,7 @@
     <color name="pink">#D82D8B</color>
     <color name="pink_light">#FFD6E7</color>
     <color name="line_gray">#80A0A0A0</color>
+    <color name="green">#23c44e</color>
 
     <color name="pieChartColorOrange">#f29557</color>
     <color name="pieChartColorRed">#E91E63</color>

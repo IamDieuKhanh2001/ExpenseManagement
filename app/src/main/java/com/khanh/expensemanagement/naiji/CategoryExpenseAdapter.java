@@ -17,13 +17,13 @@ public class CategoryExpenseAdapter extends RecyclerView.Adapter<CategoryExpense
 
     private Context context;
     private Activity activity;
-    private final ArrayList<CategoryExpense> CategoryExpenseList;
+    private final ArrayList<CategoryExpense> categoryExpenseList;
 
     public CategoryExpenseAdapter(Context context, Activity activity, ArrayList<CategoryExpense> categoryExpenseList) {
 
         this.context = context;
         this.activity = activity;
-        CategoryExpenseList = categoryExpenseList;
+        this.categoryExpenseList = categoryExpenseList;
     }
 
     @NonNull
@@ -38,12 +38,12 @@ public class CategoryExpenseAdapter extends RecyclerView.Adapter<CategoryExpense
     @Override
     public void onBindViewHolder(@NonNull CategoryExpenseViewHolder holder, int position) {
 
-        holder.category_name.setText(CategoryExpenseList.get(position).getCategoryName());
-        holder.total_spent.setText(CategoryExpenseList.get(position).getTotalSpent().toString());
+        holder.category_name.setText(categoryExpenseList.get(position).getCategoryName());
+        holder.total_spent.setText(categoryExpenseList.get(position).getTotalSpent().toString());
     }
 
     @Override
     public int getItemCount() {
-        return CategoryExpenseList.size();
+        return categoryExpenseList.size();
     }
 }
