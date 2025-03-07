@@ -39,8 +39,8 @@ public class BaseActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
 
-        FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
-
+//        FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
+        FragmentUtil.replaceFragment(getSupportFragmentManager(), new NaijiFragment());
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
