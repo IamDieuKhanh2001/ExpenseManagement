@@ -24,7 +24,7 @@ import com.khanh.expensemanagement.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgetCategoryAdapter extends RecyclerView.Adapter<BudgetCategoryViewHolder>{
+class BudgetCategoryAdapter extends RecyclerView.Adapter<BudgetCategoryViewHolder>{
 
     private Context context;
     private Activity activity;

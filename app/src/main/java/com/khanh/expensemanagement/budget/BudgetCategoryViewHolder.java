@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.khanh.expensemanagement.R;
 
-public class BudgetCategoryViewHolder extends RecyclerView.ViewHolder {
+class BudgetCategoryViewHolder extends RecyclerView.ViewHolder {
 
     public PieChart budget_category_chart;
     public TextView category_name_tv;

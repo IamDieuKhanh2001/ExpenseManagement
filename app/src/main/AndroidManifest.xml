@@ -16,7 +16,7 @@
             android:name=".budget_mainte.BudgetUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".budget_mainte.BudgetCategoryActivity"
+            android:name=".budget_mainte.BudgetCategorySelectActivity"
             android:exported="false" />
         <activity
             android:name=".budget_mainte.BudgetRegisterActivity"

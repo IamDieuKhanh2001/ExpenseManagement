@@ -1,23 +1,15 @@
-package com.khanh.expensemanagement.budget;
+package com.khanh.expensemanagement.budget_mainte;
 
-class BudgetCategory {
+class Category {
 
-    private Integer budgetId;
     private Integer categoryId;
     private String categoryName;
+    private String drawableIconUrl;
 
-    public BudgetCategory(Integer budgetId, Integer categoryId, String categoryName) {
-        this.budgetId = budgetId;
+    public Category(Integer categoryId, String categoryName, String drawableIconUrl) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-    }
-
-    public Integer getBudgetId() {
-        return budgetId;
-    }
-
-    public void setBudgetId(Integer budgetId) {
-        this.budgetId = budgetId;
+        this.drawableIconUrl = drawableIconUrl;
     }
 
     public Integer getCategoryId() {
@@ -34,5 +26,13 @@ class BudgetCategory {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getDrawableIconUrl() {
+        return drawableIconUrl;
+    }
+
+    public void setDrawableIconUrl(String drawableIconUrl) {
+        this.drawableIconUrl = drawableIconUrl;
     }
 }

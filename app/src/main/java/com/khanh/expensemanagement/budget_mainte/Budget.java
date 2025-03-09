@@ -1,6 +1,6 @@
 package com.khanh.expensemanagement.budget_mainte;
 
-public class Budget {
+class Budget {
 
     private Integer limitAmount;
     private Integer categoryId;
