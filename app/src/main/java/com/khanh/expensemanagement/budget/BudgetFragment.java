@@ -87,8 +87,6 @@ public class BudgetFragment extends Fragment {
         add_budget_btn = view.findViewById(R.id.add_budget_btn);
         add_budget_btn.setOnClickListener(buttonView -> {
 
-//            Intent budgetRegisterIntent = new Intent(buttonView.getContext(), BudgetRegisterActivity.class);
-//            startActivity(budgetRegisterIntent);
             Intent budgetCategorySelectIntent = new Intent(buttonView.getContext(), BudgetCategorySelectActivity.class);
             startActivity(budgetCategorySelectIntent);
         });

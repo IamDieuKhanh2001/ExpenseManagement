@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class BudgetCategorySelectAdapter extends RecyclerView.Adapter<BudgetCategorySelectViewHolder> {
@@ -20,6 +21,7 @@ class BudgetCategorySelectAdapter extends RecyclerView.Adapter<BudgetCategorySel
     private Activity activity;
     private List<Category> categoryList;
     private final OnCategorySelectedListener onCategorySelectedListener;
+    private List<Integer> disablePositionList = new ArrayList<>();
 
     public BudgetCategorySelectAdapter(Context context, Activity activity, List<Category> categoryList, OnCategorySelectedListener onCategorySelectedListener) {
         this.context = context;
@@ -40,7 +42,6 @@ class BudgetCategorySelectAdapter extends RecyclerView.Adapter<BudgetCategorySel
     @Override
     public void onBindViewHolder(@NonNull BudgetCategorySelectViewHolder holder, int position) {
 
-        holder.categoryId = categoryList.get(position).getCategoryId();
         holder.category_name.setText(categoryList.get(position).getCategoryName());
         if (categoryList.get(position).getDrawableIconUrl() != null) {
 
@@ -61,11 +62,41 @@ class BudgetCategorySelectAdapter extends RecyclerView.Adapter<BudgetCategorySel
             onCategorySelectedListener.onCategorySelected(position, categoryList.get(position).getCategoryId()); // Gọi callback để thông báo Activity
             notifyDataSetChanged();
         });
+
+        if (disablePositionList.contains(position)) {
+
+            // Show budget created, disable radio selection
+            holder.created_category_tv.setVisibility(View.VISIBLE);
+            holder.category_rb.setVisibility(View.GONE);
+            // disable click on layout
+            holder.itemView.setOnClickListener(null);
+            // Blur icon and title of selection
+            holder.category_icon.setAlpha(0.5f);
+            holder.category_name.setAlpha(0.5f);
+        } else {
+
+            holder.created_category_tv.setVisibility(View.GONE);
+            holder.category_rb.setVisibility(View.VISIBLE);
+        }
     }
 
     public void clearSelection() {
-        selectedPosition = -1;
+
+        this.selectedPosition = -1;
         notifyDataSetChanged();
+    }
+
+    public void disableSelectionAtPositions(List<Integer> positionList) {
+
+        this.disablePositionList = positionList;
+        if (positionList.size() > 0) {
+
+            notifyDataSetChanged();
+        }
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class BudgetRegisterActivity extends AppCompatActivity {
         ActivityUtil.enableActionBar(this, ACTIVITY_TITLE);
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
+        getIntentData();
         initTextWatcher();
     }
 
@@ -60,15 +62,23 @@ public class BudgetRegisterActivity extends AppCompatActivity {
         create_budget_btn = findViewById(R.id.create_budget_btn);
         create_budget_btn.setOnClickListener(view -> {
 
-            categoryId = -99;
-            databaseHelper.registerBudget(Integer.valueOf(limit_amount.getText().toString()), categoryId);
-            // Back to home
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("onStartFragmentName","BudgetFragment");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            if (categoryId != -1) {
+
+                databaseHelper.registerBudget(Integer.valueOf(limit_amount.getText().toString()), categoryId);
+                // Back to home
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("onStartFragmentName","BudgetFragment");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
         });
+    }
+
+    private void getIntentData() {
+
+        Intent intent = getIntent();
+        categoryId = intent.getIntExtra("categoryIdSelected", -1);
     }
 
     private void initTextWatcher() {

@@ -12,15 +12,16 @@ import com.khanh.expensemanagement.R;
 
 class BudgetCategorySelectViewHolder extends RecyclerView.ViewHolder {
 
-    public Integer categoryId;
     public ImageView category_icon;
     public TextView category_name;
     public RadioButton category_rb;
+    public TextView created_category_tv;
 
     public BudgetCategorySelectViewHolder(@NonNull View itemView) {
         super(itemView);
         category_icon = itemView.findViewById(R.id.category_icon);
         category_name = itemView.findViewById(R.id.category_name);
         category_rb = itemView.findViewById(R.id.category_rb);
+        created_category_tv = itemView.findViewById(R.id.created_category_tv);
     }
 }
