@@ -71,8 +71,8 @@ class BudgetCategorySelectAdapter extends RecyclerView.Adapter<BudgetCategorySel
             // disable click on layout
             holder.itemView.setOnClickListener(null);
             // Blur icon and title of selection
-            holder.category_icon.setAlpha(0.5f);
-            holder.category_name.setAlpha(0.5f);
+//            holder.category_icon.setAlpha(0.5f);
+//            holder.category_name.setAlpha(0.5f);
         } else {
 
             holder.created_category_tv.setVisibility(View.GONE);
