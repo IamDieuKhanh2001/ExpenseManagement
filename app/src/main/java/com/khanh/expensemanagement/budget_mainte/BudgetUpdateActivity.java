@@ -9,15 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.khanh.expensemanagement.BaseActivity;
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
 
-public class BudgetUpdateActivity extends AppCompatActivity {
+public class BudgetUpdateActivity extends BaseActivity {
 
     private final String ACTIVITY_TITLE = "Update budget";
 

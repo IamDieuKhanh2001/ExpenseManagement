@@ -44,41 +44,61 @@ class BudgetCategorySelectAdapter extends RecyclerView.Adapter<BudgetCategorySel
 
         holder.category_name.setText(categoryList.get(position).getCategoryName());
         if (categoryList.get(position).getDrawableIconUrl() != null) {
-
-            int imageResId = context.getResources().getIdentifier(categoryList.get(position).getDrawableIconUrl(), "drawable", context.getPackageName());
+            int imageResId = context.getResources().getIdentifier(
+                    categoryList.get(position).getDrawableIconUrl(), "drawable", context.getPackageName()
+            );
             if (imageResId != 0) {
-
                 holder.category_icon.setImageResource(imageResId);
             }
         }
         holder.category_rb.setChecked(position == selectedPosition);
+
+        // Handle RadioButton click listener
         holder.category_rb.setOnClickListener(v -> {
-            selectedPosition = position;
-            onCategorySelectedListener.onCategorySelected(position, categoryList.get(position).getCategoryId()); // Gọi callback để thông báo Activity
-            notifyDataSetChanged();
+            if (!disablePositionList.contains(position)) {  // Prevent click action if item is disabled
+                selectedPosition = position;
+                onCategorySelectedListener.onCategorySelected(position, categoryList.get(position).getCategoryId());
+                notifyDataSetChanged();
+            }
         });
+
+        // Handle item click listener
         holder.itemView.setOnClickListener(v -> {
-            selectedPosition = position;
-            onCategorySelectedListener.onCategorySelected(position, categoryList.get(position).getCategoryId()); // Gọi callback để thông báo Activity
-            notifyDataSetChanged();
+            if (!disablePositionList.contains(position)) {  // Prevent click action if item is disabled
+                selectedPosition = position;
+                onCategorySelectedListener.onCategorySelected(position, categoryList.get(position).getCategoryId());
+                notifyDataSetChanged();
+            }
         });
 
+        // Apply disabled state if the position is in disablePositionList
         if (disablePositionList.contains(position)) {
-
-            // Show budget created, disable radio selection
+            // Show 'created' text, hide radio button
             holder.created_category_tv.setVisibility(View.VISIBLE);
             holder.category_rb.setVisibility(View.GONE);
-            // disable click on layout
-            holder.itemView.setOnClickListener(null);
-            // Blur icon and title of selection
-//            holder.category_icon.setAlpha(0.5f);
-//            holder.category_name.setAlpha(0.5f);
-        } else {
 
+            // Disable click on layout
+            holder.itemView.setOnClickListener(null);
+
+            // Blur icon and title of selection
+            holder.category_icon.setAlpha(0.5f);
+            holder.category_name.setAlpha(0.5f);
+
+            // Disable the radio button's click behavior
+            holder.category_rb.setEnabled(false); // Disable radio button interaction
+        } else {
+            // reset any previously applied disabled states
             holder.created_category_tv.setVisibility(View.GONE);
             holder.category_rb.setVisibility(View.VISIBLE);
+
+            // Re-enable the radio button if it was disabled
+            holder.category_rb.setEnabled(true);
+            // Restore full opacity
+            holder.category_icon.setAlpha(1f);
+            holder.category_name.setAlpha(1f);
         }
     }
+
 
     public void clearSelection() {
 

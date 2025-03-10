@@ -6,7 +6,7 @@ import androidx.activity.EdgeToEdge;
 
 import com.khanh.expensemanagement.exception.CustomExceptionHandler;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends HomeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

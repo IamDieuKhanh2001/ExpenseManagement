@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.khanh.expensemanagement.BaseActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
@@ -21,7 +20,7 @@ import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
-public class TransDetailActivity extends AppCompatActivity {
+public class TransDetailActivity extends BaseActivity {
 
     private final String ACTIVITY_TITLE = "Transaction detail";
 

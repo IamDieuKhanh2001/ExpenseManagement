@@ -1,27 +1,27 @@
 package com.khanh.expensemanagement.budget_mainte;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.khanh.expensemanagement.BaseActivity;
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
-import com.khanh.expensemanagement.budget.BudgetFragment;
-import com.khanh.expensemanagement.trans_mainte.TransDetailActivity;
+import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
-import com.khanh.expensemanagement.util.FragmentUtil;
+import com.khanh.expensemanagement.util.SqliteUtil;
 
-public class BudgetRegisterActivity extends AppCompatActivity {
+public class BudgetRegisterActivity extends BaseActivity {
 
     private final String ACTIVITY_TITLE = "Create budget";
 
@@ -29,6 +29,8 @@ public class BudgetRegisterActivity extends AppCompatActivity {
     Button create_budget_btn;
     DatabaseHelper databaseHelper;
     Integer categoryId;
+    ImageView category_icon;
+    TextView category_name_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class BudgetRegisterActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
         getIntentData();
+        getDataDisplay();
         initTextWatcher();
     }
 
@@ -46,10 +49,6 @@ public class BudgetRegisterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // Back to budget
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("onStartFragmentName","BudgetFragment");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
             finish();
             return true;
         }
@@ -58,7 +57,10 @@ public class BudgetRegisterActivity extends AppCompatActivity {
 
     private void initWidgets() {
 
+        category_icon = findViewById(R.id.category_icon);
+        category_name_tv = findViewById(R.id.category_name_tv);
         limit_amount = findViewById(R.id.limit_amount);
+        limit_amount.requestFocus();
         create_budget_btn = findViewById(R.id.create_budget_btn);
         create_budget_btn.setOnClickListener(view -> {
 
@@ -67,7 +69,7 @@ public class BudgetRegisterActivity extends AppCompatActivity {
                 databaseHelper.registerBudget(Integer.valueOf(limit_amount.getText().toString()), categoryId);
                 // Back to home
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("onStartFragmentName","BudgetFragment");
+                intent.putExtra("onStartFragmentName", "BudgetFragment");
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -87,7 +89,8 @@ public class BudgetRegisterActivity extends AppCompatActivity {
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -95,10 +98,57 @@ public class BudgetRegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
 
         limit_amount.addTextChangedListener(textWatcher);
+    }
+
+    private void getDataDisplay() {
+
+        int imageResId = 0;
+
+        switch (categoryId) {
+            case -99: {
+                // create budget total on month
+
+                imageResId = getResources().getIdentifier("ic_bill", "drawable", getPackageName());
+                if (imageResId != 0) {
+
+                    category_icon.setImageResource(imageResId);
+                }
+                category_name_tv.setText("Total spending month");
+                break;
+            }
+            default: {
+                // create budget on specific category
+                Cursor cursor = databaseHelper.mNameSelectByUk1(CategoryClass.NAME_IDENT_CD, categoryId.toString());
+
+                if (cursor != null && cursor.moveToFirst()) {
+
+                    // display category icon
+                    if (cursor.getString(4) != null && !cursor.getString(4).isEmpty()) {
+
+                        imageResId = getResources().getIdentifier(cursor.getString(4), "drawable", getPackageName());
+                        if (imageResId != 0) {
+
+                            category_icon.setImageResource(imageResId);
+                        }
+                    }
+
+                    // display category name
+                    if (!cursor.getString(3).isEmpty()) {
+
+                        category_name_tv.setText(cursor.getString(3));
+                    }
+
+                    SqliteUtil.releaseCursor(cursor);
+                }
+            }
+        }
+
+
     }
 
     private void dataErrorCheck() {

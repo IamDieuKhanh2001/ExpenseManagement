@@ -3,9 +3,6 @@ package com.khanh.expensemanagement.budget_mainte;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,15 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.khanh.expensemanagement.BaseActivity;
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
@@ -32,7 +27,7 @@ import com.khanh.expensemanagement.util.SqliteUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgetCategorySelectActivity extends AppCompatActivity {
+public class BudgetCategorySelectActivity extends BaseActivity {
 
     private final String ACTIVITY_TITLE = "Create budget";
 
@@ -97,7 +92,6 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
             Intent intent = new Intent(view.getContext(), BudgetRegisterActivity.class);
             intent.putExtra("categoryIdSelected", categorySelectedViewModel.getCategoryIdSelected().getValue());
             startActivity(intent);
-            finish();
         });
     }
 
@@ -129,9 +123,11 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
     private void disableCreatedBudget() {
 
         List<Integer> disablePositionList = new ArrayList<>();
+        Cursor cursorTotal;
+        Cursor cursorCategory;
 
         // Disable selection total budget on month if exist in database
-        Cursor cursorTotal = databaseHelper.budgetTotalSpendingMonth();
+        cursorTotal = databaseHelper.budgetTotalSpendingMonth();
         if (cursorTotal != null && cursorTotal.moveToFirst()) {
 
             // Show budget created, disable radio selection
@@ -139,19 +135,28 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
             total_spent_month_rb.setVisibility(View.GONE);
             // disable click on layout
             total_spent_month_layout.setOnClickListener(null);
+            // Disable the radio button's click behavior
+            total_spent_month_rb.setEnabled(false);
             // Blur icon and title of selection
             total_spent_icon.setAlpha(0.5f);
             total_spent_tv.setAlpha(0.5f);
         } else {
 
+            // reset any previously applied disabled states
             created_total_tv.setVisibility(View.GONE);
             total_spent_month_rb.setVisibility(View.VISIBLE);
+            // Re-enable the radio button if it was disabled
+            total_spent_month_rb.setEnabled(true);
+            // Restore full opacity
+            total_spent_icon.setAlpha(1f);
+            total_spent_tv.setAlpha(1f);
         }
 
         // Disable selection budget by category if exist in database
+        cursorCategory = null;
         for (int i = 0; i < budgetCategorySelectAdapter.getCategoryList().size(); i++) {
 
-            Cursor cursorCategory = databaseHelper.budgetFindByCategoryId(budgetCategorySelectAdapter.getCategoryList().get(i).getCategoryId());
+            cursorCategory = databaseHelper.budgetFindByCategoryId(budgetCategorySelectAdapter.getCategoryList().get(i).getCategoryId());
             if (cursorCategory != null && cursorCategory.moveToFirst()) {
 
                 disablePositionList.add(i);
@@ -161,6 +166,9 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
 
             budgetCategorySelectAdapter.disableSelectionAtPositions(disablePositionList);
         }
+
+        SqliteUtil.releaseCursor(cursorTotal);
+        SqliteUtil.releaseCursor(cursorCategory);
     }
 
     private void initWatcher() {

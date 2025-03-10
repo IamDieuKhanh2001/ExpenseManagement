@@ -1,42 +1,28 @@
 package com.khanh.expensemanagement.trans_mainte;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.khanh.expensemanagement.BaseActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.component.CustomSelectBox;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
-import com.khanh.expensemanagement.m_name.view.MNameAdapter;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.DateTimeUtil;
-import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
-public class TransUpdateActivity extends AppCompatActivity {
+public class TransUpdateActivity extends BaseActivity {
 
     private final String ACTIVITY_TITLE = "Edit expense";
 
