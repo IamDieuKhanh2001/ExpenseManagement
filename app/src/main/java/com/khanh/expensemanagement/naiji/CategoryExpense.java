@@ -2,7 +2,7 @@ package com.khanh.expensemanagement.naiji;
 
 import java.math.BigInteger;
 
-public class CategoryExpense {
+class CategoryExpense {
 
     private Integer id;
     private String categoryName;

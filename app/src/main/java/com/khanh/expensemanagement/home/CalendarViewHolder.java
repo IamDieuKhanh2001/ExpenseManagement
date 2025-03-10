@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
 
-public class CalendarViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+class CalendarViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
     public final TextView dayOfMonth;
     public final TextView totalAmount;

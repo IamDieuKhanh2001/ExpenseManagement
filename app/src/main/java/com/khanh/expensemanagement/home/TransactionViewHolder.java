@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
 
-public class TransactionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+class TransactionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public TextView transaction_title_tv;
     public TextView category_tv;

@@ -14,7 +14,7 @@ import com.khanh.expensemanagement.util.FormUtil;
 
 import java.util.ArrayList;
 
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHolder> {
+class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHolder> {
 
     private Context context;
     private Activity activity;

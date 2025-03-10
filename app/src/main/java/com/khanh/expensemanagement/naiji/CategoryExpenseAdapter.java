@@ -13,7 +13,7 @@ import com.khanh.expensemanagement.R;
 
 import java.util.ArrayList;
 
-public class CategoryExpenseAdapter extends RecyclerView.Adapter<CategoryExpenseViewHolder> {
+class CategoryExpenseAdapter extends RecyclerView.Adapter<CategoryExpenseViewHolder> {
 
     private Context context;
     private Activity activity;

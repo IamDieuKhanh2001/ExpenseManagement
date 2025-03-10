@@ -11,7 +11,7 @@ import com.khanh.expensemanagement.R;
 
 import java.util.ArrayList;
 
-public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
+class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private final ArrayList<String> daysOfMonth;
     private final ArrayList<Integer> totalAmountInDate;
     private final OnItemListener onItemListener;

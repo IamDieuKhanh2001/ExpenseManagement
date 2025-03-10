@@ -2,6 +2,8 @@ package com.khanh.expensemanagement.budget_mainte;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,10 +29,10 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
     private RecyclerView budget_category_recycler_view;
     private Button continue_btn;
     DatabaseHelper databaseHelper;
-    private int categoryIdSelected = -1;
     private RadioButton total_spent_month_rb;
     private LinearLayout total_spent_month_layout;
     BudgetCategorySelectAdapter budgetCategorySelectAdapter;
+    private CategorySelectedViewModel categorySelectedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
         getDataDisplay();
+        initWatcher();
     }
 
     private void initWidgets() {
@@ -48,15 +52,15 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
         total_spent_month_rb.setOnClickListener(view -> {
             budgetCategorySelectAdapter.clearSelection();
             total_spent_month_rb.setChecked(true);
-            categoryIdSelected = -99;
-            Log.d("categoryIdSelected", String.valueOf(categoryIdSelected));
+            categorySelectedViewModel.setCategoryIdSelected(-99);
+            Log.d("categoryIdSelected", String.valueOf(categorySelectedViewModel.getCategoryIdSelected()));
         });
         total_spent_month_layout = findViewById(R.id.total_spent_month_layout);
         total_spent_month_layout.setOnClickListener(view -> {
             budgetCategorySelectAdapter.clearSelection();
             total_spent_month_rb.setChecked(true);
-            categoryIdSelected = -99;
-            Log.d("categoryIdSelected", String.valueOf(categoryIdSelected));
+            categorySelectedViewModel.setCategoryIdSelected(-99);
+            Log.d("categoryIdSelected", String.valueOf(categorySelectedViewModel.getCategoryIdSelected()));
         });
         continue_btn = findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(view -> {
@@ -82,10 +86,20 @@ public class BudgetCategorySelectActivity extends AppCompatActivity {
         budgetCategorySelectAdapter = new BudgetCategorySelectAdapter(this, this, categoryList, ((position, categoryIdClick) -> {
 
             total_spent_month_rb.setChecked(false);
-            categoryIdSelected = categoryIdClick;
-            Log.d("categoryIdSelected", String.valueOf(categoryIdSelected));
+            categorySelectedViewModel.setCategoryIdSelected(categoryIdClick);
+            Log.d("categoryIdSelected", String.valueOf(categorySelectedViewModel.getCategoryIdSelected()));
         }));
         budget_category_recycler_view.setAdapter(budgetCategorySelectAdapter);
         budget_category_recycler_view.setLayoutManager(new LinearLayoutManager(this));
     }
+
+    private void initWatcher() {
+
+        categorySelectedViewModel = new ViewModelProvider(this).get(CategorySelectedViewModel.class);
+
+        categorySelectedViewModel.getCategoryIdSelected().observe(this, categoryId -> {
+            continue_btn.setEnabled(categoryId != -1);
+        });
+    }
+
 }

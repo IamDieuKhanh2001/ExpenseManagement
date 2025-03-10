@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
 
-public class CategoryExpenseViewHolder extends RecyclerView.ViewHolder {
+class CategoryExpenseViewHolder extends RecyclerView.ViewHolder {
 
     public TextView category_name;
     public TextView total_spent;
