@@ -1,9 +1,9 @@
 package com.khanh.expensemanagement.util;
 
 import android.content.Context;
-import android.content.DialogInterface;
-
 import androidx.appcompat.app.AlertDialog;
+
+import com.khanh.expensemanagement.R;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -38,6 +38,23 @@ public class FormUtil {
 
     public static boolean fncIsNumeric(String str) {
         return str != null && str.matches("-?\\d+(\\.\\d+)?");
+    }
+
+    public static String currencyFormat(Context context,Object number) {
+
+        String result;
+
+        try {
+
+            result = number.toString();
+            result = fncDecFormat(result);
+            result = context.getString(R.string.transaction_amount_currency, result);
+            return result;
+        } catch (Exception e) {
+
+            result = "";
+            return result;
+        }
     }
 
     public static void openConfirmDialog(Context context, String title, String message, Runnable onConfirm) {

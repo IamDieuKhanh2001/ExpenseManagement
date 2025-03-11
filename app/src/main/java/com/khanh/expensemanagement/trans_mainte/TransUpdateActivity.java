@@ -65,7 +65,7 @@ public class TransUpdateActivity extends BaseActivity {
     private void initWidgets() {
 
         amount = findViewById(R.id.amount);
-
+        amount.requestFocus();
         m_name_category = findViewById(R.id.m_name_category);
         m_name_category.setNameIdentCd(CategoryClass.NAME_IDENT_CD);
         date = findViewById(R.id.date);

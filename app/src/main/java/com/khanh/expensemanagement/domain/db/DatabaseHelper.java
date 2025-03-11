@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.khanh.expensemanagement.ApplicationProperties;
+import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.db.SqlParamsUtil;
 
@@ -155,6 +156,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor budgetCategoryFindAll() {
+
+        String query = "SELECT budgets.id, limit_amount, category_id, budgets.ins_dttm, budgets.upd_dttm, m_name.name_ss, m_name.drawable_icon_url" +
+                " FROM budgets" +
+                " LEFT JOIN m_name" +
+                " ON budgets.category_id = m_name.name_cd" +
+                " AND m_name.name_ident_cd = '" + CategoryClass.NAME_IDENT_CD + "'" +
+                " WHERE category_id IS NOT -99" +
+                " ORDER BY m_name.name_display_seq ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
     public void registerBudget(Integer limitAmount, Integer categoryId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -236,10 +255,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public BigInteger transactionTotalSpentOnMonth(YearMonth yearMonth) {
 
+        return transactionTotalSpentOnMonth(yearMonth, null);
+    }
+
+    public BigInteger transactionTotalSpentOnMonth(YearMonth yearMonth, Integer categoryId) {
+
         BigInteger totalSpent = BigInteger.valueOf(0);
         String query = "SELECT " + "COALESCE(SUM(amount), 0) AS total_spent" +
                 " FROM " + TABLE_TRANSACTION +
                 " WHERE transaction_dt LIKE ?";
+        if (categoryId != null) {
+
+            query += " AND category_id IS " + categoryId;
+        }
+
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -319,5 +348,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

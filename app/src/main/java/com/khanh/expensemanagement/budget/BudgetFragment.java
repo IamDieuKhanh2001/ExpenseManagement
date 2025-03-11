@@ -29,11 +29,14 @@ import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 import com.khanh.expensemanagement.component.SemiCircularProgressBar;
+import com.khanh.expensemanagement.util.SqliteUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,8 @@ public class BudgetFragment extends Fragment {
 
     private final String FRAGMENT_TITLE = "Budget";
 
+    TextView year_month_tv;
+    TextView budget_header_note;
     Button add_budget_btn;
     Button more_button;
     SemiCircularProgressBar progressBar;
@@ -51,6 +56,7 @@ public class BudgetFragment extends Fragment {
     TextView budget;
     DatabaseHelper databaseHelper;
     CardView card_total_budget;
+    CardView card_budget_category;
     RecyclerView budget_category_recycler_view;
 
     public BudgetFragment() {
@@ -84,6 +90,8 @@ public class BudgetFragment extends Fragment {
 
     private void initWidgets(View view) {
 
+        year_month_tv = view.findViewById(R.id.year_month_tv);
+        budget_header_note = view.findViewById(R.id.budget_header_note);
         add_budget_btn = view.findViewById(R.id.add_budget_btn);
         add_budget_btn.setOnClickListener(buttonView -> {
 
@@ -102,13 +110,32 @@ public class BudgetFragment extends Fragment {
 
             showMoreBottomDialog();
         });
+        card_budget_category = view.findViewById(R.id.card_budget_category);
         budget_category_recycler_view = view.findViewById(R.id.budget_category_recycler_view);
     }
 
     private void getDataDisplay() {
 
+        getNotiText();
         getBudgetSpendingMonth();
         getBudgetByCategory();
+    }
+
+    private void getNotiText() {
+
+        LocalDate today = LocalDate.now();
+        YearMonth yearMonth = YearMonth.from(today);
+
+        // set current year month
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        String formattedDate = yearMonth.format(formatter);
+        year_month_tv.setText(formattedDate);
+
+        // set day left note
+        int totalDaysInMonth = yearMonth.lengthOfMonth();
+        int remainingDays = totalDaysInMonth - today.getDayOfMonth();
+        String formattedText = getString(R.string.budget_header_note, String.valueOf(remainingDays));
+        budget_header_note.setText(formattedText);
     }
 
     private void getBudgetSpendingMonth() {
@@ -169,6 +196,7 @@ public class BudgetFragment extends Fragment {
                 progressBar.setProgress(remainingPercentage.floatValue());
             }
 
+            SqliteUtil.releaseCursor(cursor);
         } else {
 
             card_total_budget.setVisibility(View.GONE);
@@ -177,14 +205,43 @@ public class BudgetFragment extends Fragment {
 
     private void getBudgetByCategory() {
 
+        BigInteger totalSpent;
         List<BudgetCategory> budgetCategoryList = new ArrayList<>();
-        budgetCategoryList.add(new BudgetCategory(1,1,"category test 1"));
-        budgetCategoryList.add(new BudgetCategory(1,1,"category test 2"));
-        budgetCategoryList.add(new BudgetCategory(1,1,"category test 3"));
-        budgetCategoryList.add(new BudgetCategory(1,1,"category test 4"));
-        BudgetCategoryAdapter budgetCategoryAdapter = new BudgetCategoryAdapter(requireContext(), getActivity(), budgetCategoryList);
-        budget_category_recycler_view.setAdapter(budgetCategoryAdapter);
-        budget_category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Cursor cursor = databaseHelper.budgetCategoryFindAll();
+        if (cursor != null && cursor.moveToFirst()) {
+
+            card_budget_category.setVisibility(View.VISIBLE);
+            //Get budget info
+            do {
+
+                BudgetCategory budgetCategory = new BudgetCategory();
+                budgetCategory.setBudgetId(cursor.getInt(0));
+                budgetCategory.setCategoryId(cursor.getInt(2));
+                budgetCategory.setCategoryName(cursor.getString(5));
+                budgetCategory.setSpentAmount(BigInteger.valueOf(0));
+                budgetCategory.setLimitAmount(BigInteger.valueOf(cursor.getInt(1)));
+                budgetCategory.setDrawableIconUrl(cursor.getString(6));
+                budgetCategoryList.add(budgetCategory);
+            } while (cursor.moveToNext());
+
+            // Get total spent in category
+            for (BudgetCategory item : budgetCategoryList) {
+
+                totalSpent = databaseHelper.transactionTotalSpentOnMonth(YearMonth.now(), item.getCategoryId());
+                item.setSpentAmount(totalSpent);
+            }
+
+            BudgetCategoryAdapter budgetCategoryAdapter = new BudgetCategoryAdapter(requireContext(), getActivity(), budgetCategoryList);
+            budget_category_recycler_view.setAdapter(budgetCategoryAdapter);
+            budget_category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            SqliteUtil.releaseCursor(cursor);
+        } else {
+
+            // If none budget category, hide card budget by category
+            card_budget_category.setVisibility(View.GONE);
+        }
     }
 
     private void showMoreBottomDialog() {

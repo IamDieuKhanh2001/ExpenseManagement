@@ -43,7 +43,7 @@ public class SemiCircularProgressBar extends View {
 
         // Khởi tạo Paint cho tiến trình
         progressPaint = new Paint();
-        progressPaint.setColor(ContextCompat.getColor(context, R.color.pink)); // Màu tiến trình
+        progressPaint.setColor(ContextCompat.getColor(context, R.color.budgetChartColor)); // Màu tiến trình
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setStrokeWidth(arcWidth);
     }

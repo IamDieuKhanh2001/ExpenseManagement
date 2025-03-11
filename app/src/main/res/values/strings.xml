@@ -5,4 +5,5 @@
     <string name="over_spent">Overspent</string>
     <string name="remaining">Remaining</string>
     <string name="required">Required</string>
+    <string name="budget_header_note">%1$s days left till the end of this month</string>
 </resources>

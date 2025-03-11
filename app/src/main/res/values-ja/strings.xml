@@ -5,4 +5,5 @@
     <string name="over_spent">予算オーバー</string>
     <string name="remaining">残り</string>
     <string name="required">必須</string>
+    <string name="budget_header_note">月末まであと%1$s日です。</string>
 </resources>
