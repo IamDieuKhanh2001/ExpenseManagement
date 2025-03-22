@@ -33,11 +33,13 @@ class BudgetCategoryAdapter extends RecyclerView.Adapter<BudgetCategoryViewHolde
     private Context context;
     private Activity activity;
     private final List<BudgetCategory> budgetCategoryList;
+    private final BudgetCategoryAdapter.OnMoreOptionListener onMoreOptionListener;
 
-    public BudgetCategoryAdapter(Context context, Activity activity, List<BudgetCategory> budgetCategoryList) {
+    public BudgetCategoryAdapter(Context context, Activity activity, List<BudgetCategory> budgetCategoryList, OnMoreOptionListener onMoreOptionListener) {
         this.context = context;
         this.activity = activity;
         this.budgetCategoryList = budgetCategoryList;
+        this.onMoreOptionListener = onMoreOptionListener;
     }
 
     @NonNull
@@ -46,7 +48,7 @@ class BudgetCategoryAdapter extends RecyclerView.Adapter<BudgetCategoryViewHolde
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.budget_category_row, parent, false);
-        return new BudgetCategoryViewHolder(view, context);
+        return new BudgetCategoryViewHolder(view, context, onMoreOptionListener);
     }
 
     @Override
@@ -58,6 +60,7 @@ class BudgetCategoryAdapter extends RecyclerView.Adapter<BudgetCategoryViewHolde
 
         budgetCategory = budgetCategoryList.get(position);
 
+        holder.categoryId = budgetCategory.getCategoryId();
         if (budgetCategory.getLimitAmount().compareTo(budgetCategory.getSpentAmount()) < 0 || budgetCategory.getLimitAmount().signum() != 1) {
 
             remainingPercentage = BigDecimal.valueOf(0);
@@ -159,5 +162,10 @@ class BudgetCategoryAdapter extends RecyclerView.Adapter<BudgetCategoryViewHolde
     @Override
     public int getItemCount() {
         return budgetCategoryList.size();
+    }
+
+    public interface OnMoreOptionListener {
+
+        void onClick(int position, Integer categoryId);
     }
 }

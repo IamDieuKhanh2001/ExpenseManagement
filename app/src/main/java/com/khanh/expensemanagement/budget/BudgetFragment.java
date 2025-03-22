@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,7 +109,8 @@ public class BudgetFragment extends Fragment {
         more_button = view.findViewById(R.id.more_button);
         more_button.setOnClickListener(buttonView -> {
 
-            showMoreBottomDialog();
+            // total spent in month
+            showMoreBottomDialog(-99);
         });
         card_budget_category = view.findViewById(R.id.card_budget_category);
         budget_category_recycler_view = view.findViewById(R.id.budget_category_recycler_view);
@@ -232,7 +234,10 @@ public class BudgetFragment extends Fragment {
                 item.setSpentAmount(totalSpent);
             }
 
-            BudgetCategoryAdapter budgetCategoryAdapter = new BudgetCategoryAdapter(requireContext(), getActivity(), budgetCategoryList);
+            BudgetCategoryAdapter budgetCategoryAdapter = new BudgetCategoryAdapter(requireContext(), getActivity(), budgetCategoryList, (position, categoryId) -> {
+
+                showMoreBottomDialog(categoryId);
+            });
             budget_category_recycler_view.setAdapter(budgetCategoryAdapter);
             budget_category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -244,7 +249,7 @@ public class BudgetFragment extends Fragment {
         }
     }
 
-    private void showMoreBottomDialog() {
+    private void showMoreBottomDialog(Integer categoryId) {
 
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -269,7 +274,7 @@ public class BudgetFragment extends Fragment {
             String dialogMessage = "Deleted budget can not be recovered";
             FormUtil.openConfirmDialog(getContext(), dialogTitle, dialogMessage, () -> {
 
-                databaseHelper.deleteBudgetTotalSpendingMonth();
+                deleteBudgetByCategory(categoryId);
                 FragmentUtil.replaceFragment(getActivity().getSupportFragmentManager(), new BudgetFragment());
             });
         });
@@ -281,5 +286,10 @@ public class BudgetFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void deleteBudgetByCategory(Integer categoryId) {
+
+        databaseHelper.deleteBudgetByCategoryId(categoryId);
     }
 }

@@ -1,11 +1,8 @@
 package com.khanh.expensemanagement.budget;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.khanh.expensemanagement.R;
 
-class BudgetCategoryViewHolder extends RecyclerView.ViewHolder {
+class BudgetCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    public Integer categoryId;
     public PieChart budget_category_chart;
     public TextView category_name_tv;
     public TextView remaining_title;
@@ -23,8 +21,10 @@ class BudgetCategoryViewHolder extends RecyclerView.ViewHolder {
     public TextView total_spent_amount;
     public TextView budget_amount;
     public TextView over_spent_icon;
+    public Button more_button;
+    private final BudgetCategoryAdapter.OnMoreOptionListener onMoreOptionListener;
 
-    public BudgetCategoryViewHolder(@NonNull View itemView, Context context) {
+    public BudgetCategoryViewHolder(@NonNull View itemView, Context context, BudgetCategoryAdapter.OnMoreOptionListener onMoreOptionListener) {
 
         super(itemView);
 
@@ -35,5 +35,14 @@ class BudgetCategoryViewHolder extends RecyclerView.ViewHolder {
         total_spent_amount = itemView.findViewById(R.id.total_spent_amount);
         budget_amount = itemView.findViewById(R.id.budget_amount);
         over_spent_icon = itemView.findViewById(R.id.over_spent_icon);
+        more_button = itemView.findViewById(R.id.more_button);
+        this.onMoreOptionListener = onMoreOptionListener;
+        more_button.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        onMoreOptionListener.onClick(getAdapterPosition(), categoryId);
     }
 }
