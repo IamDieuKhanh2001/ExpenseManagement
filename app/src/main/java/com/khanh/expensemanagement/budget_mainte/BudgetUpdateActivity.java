@@ -5,12 +5,15 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+
 import com.khanh.expensemanagement.BaseActivity;
 import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
@@ -41,6 +44,16 @@ public class BudgetUpdateActivity extends BaseActivity {
         getIntentData();
         getDataDisplay();
         initTextWatcher();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Back to budget
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initWidgets() {
