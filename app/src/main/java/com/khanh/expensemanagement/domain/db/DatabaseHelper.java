@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.khanh.expensemanagement.ApplicationProperties;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.util.DateTimeUtil;
+import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.util.db.SqlParamsUtil;
 
 import java.math.BigInteger;
@@ -53,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "name_ident_name" + " TEXT NOT NULL, " +
                 "name_ident_note" + " TEXT NOT NULL, " +
                 "name_display_seq" + " INTEGER NOT NULL, " +
-                "name_ss" + " TEXT NOT NULL, " +
+                "name_ss_ja" + " TEXT NOT NULL, " +
                 "name_rk" + " TEXT NOT NULL, " +
                 "drawable_icon_url" + " TEXT, " +
                 "ins_dttm" + " TEXT, " +
@@ -74,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(queryCreateMName);
         sqLiteDatabase.execSQL(queryCreateBudget);
 
-        createSeedData(sqLiteDatabase);
+        SqliteUtil.executeSQLScript(sqLiteDatabase, context, "m_name.sql");
     }
 
     @Override
@@ -85,30 +86,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    private void createSeedData(SQLiteDatabase db) {
-
-        String[] seederQueries = new String[]{
-
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (1,'sourcePaymentKbn','1','支払い方','',1,'現金','現金','ic_source_cash','2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (2,'sourcePaymentKbn','2','支払い方','',2,'振込','振込','ic_source_card','2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (3,'sourcePaymentKbn','3','支払い方','',3,'スイカ','スイカ','ic_source_suica','2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (4,'sourcePaymentKbn','4','支払い方','',4,'その他','他',NULL,'2025-02-01','2025-02-01');",
-
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (5,'categoryKbn','1','カテゴリー','',1,'食べ物','食べ物','ic_category_food','2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (6,'categoryKbn','2','カテゴリー','',2,'輸送','輸送','ic_category_transport','2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (7,'categoryKbn','3','カテゴリー','',3,'美','美',NULL,'2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (8,'categoryKbn','4','カテゴリー','',4,'勉強','勉強',NULL,'2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (9,'categoryKbn','5','カテゴリー','',5,'買い物','買い物',NULL,'2025-02-01','2025-02-01');",
-                "INSERT INTO " + TABLE_M_NAME + " (\"id\",\"name_ident_cd\",\"name_cd\",\"name_ident_name\",\"name_ident_note\",\"name_display_seq\",\"name_ss\",\"name_rk\",\"drawable_icon_url\",\"ins_dttm\",\"upd_dttm\") VALUES (10,'categoryKbn','6','カテゴリー','',6,'エンターテインメント','エンターテインメント',NULL,'2025-02-01','2025-02-01');",
-        };
-
-        for (String query : seederQueries) {
-            db.execSQL(query);
-        }
-    }
-
     public Cursor mNameFindAll(String nameIdentCd) {
-        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss, drawable_icon_url" +
+        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss_ja, drawable_icon_url" +
                 " FROM " + TABLE_M_NAME +
                 " WHERE m_name.name_ident_cd = ?" +
                 " ORDER BY m_name.name_display_seq ASC";
@@ -123,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor mNameSelectByUk1(String nameIdentCd, String nameCd) {
 
-        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss, drawable_icon_url" +
+        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss_ja, drawable_icon_url" +
                 " FROM " + TABLE_M_NAME +
                 " WHERE m_name.name_ident_cd = ?" +
                 " AND m_name.name_cd = ? ";
@@ -158,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor budgetCategoryFindAll() {
 
-        String query = "SELECT budgets.id, limit_amount, category_id, budgets.ins_dttm, budgets.upd_dttm, m_name.name_ss, m_name.drawable_icon_url" +
+        String query = "SELECT budgets.id, limit_amount, category_id, budgets.ins_dttm, budgets.upd_dttm, m_name.name_ss_ja, m_name.drawable_icon_url" +
                 " FROM budgets" +
                 " LEFT JOIN m_name" +
                 " ON budgets.category_id = m_name.name_cd" +
