@@ -147,8 +147,6 @@ public class BudgetRegisterActivity extends BaseActivity {
                 }
             }
         }
-
-
     }
 
     private void dataErrorCheck() {

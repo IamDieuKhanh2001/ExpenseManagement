@@ -263,6 +263,7 @@ public class BudgetFragment extends Fragment {
 
             dialog.dismiss();
             Intent intent = new Intent(view.getContext(), BudgetUpdateActivity.class);
+            intent.putExtra("categoryUpdateId", categoryId);
             startActivity(intent);
         });
 
