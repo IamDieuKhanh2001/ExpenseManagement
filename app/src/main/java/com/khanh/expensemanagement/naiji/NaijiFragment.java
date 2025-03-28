@@ -1,6 +1,7 @@
 package com.khanh.expensemanagement.naiji;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,13 +16,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +38,12 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.renderer.PieChartRenderer;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.khanh.expensemanagement.MainActivity;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.m_name.view.MNameAdapter;
+import com.khanh.expensemanagement.util.LangUtil;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -67,6 +73,9 @@ public class NaijiFragment extends Fragment {
     private PieChart pieChart;
     private PieChart budget_category_chart;
     private RecyclerView category_recycler_view;
+
+    private RadioGroup language_radio_group;
+    private Button btn_save;
 
     public NaijiFragment() {
         // Required empty public constructor
@@ -105,7 +114,6 @@ public class NaijiFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_naiji, container, false);
         initWidgets(view);
-        initWidgetsTest(view);
         return view;
     }
 
@@ -184,64 +192,6 @@ public class NaijiFragment extends Fragment {
         dataSet.setValueLineWidth(2f); // Độ dày đường
         dataSet.setValueLineColor(Color.BLACK); // Màu của đường dẫn
 
-    }
-
-    private void initWidgetsTest(View view) {
-
-        int progress = 70; // Giá trị phần trăm (70%)
-
-        budget_category_chart = view.findViewById(R.id.budget_category_chart);
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(progress, "")); // Tiến trình
-        entries.add(new PieEntry(100 - progress, "")); // Phần còn lại
-
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        List<Integer> colors = new ArrayList<>();
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorOrange));
-        colors.add(Color.LTGRAY);
-        dataSet.setColors(colors);
-        dataSet.setValueTextSize(12f);
-        dataSet.setDrawValues(false);
-
-        PieData pieData = new PieData(dataSet);
-        budget_category_chart.setData(pieData);
-        budget_category_chart.setExtraOffsets(1, 1, 1, 1);
-        budget_category_chart.setHoleRadius(70f); // Độ lớn phần trống ở giữa
-        budget_category_chart.setTransparentCircleRadius(0f);
-        budget_category_chart.setDrawEntryLabels(false);
-        budget_category_chart.setRotationEnabled(false);
-        budget_category_chart.getDescription().setEnabled(false);
-        budget_category_chart.getLegend().setEnabled(false); // Ẩn legend
-        budget_category_chart.setRenderer(new PieChartRenderer(budget_category_chart, budget_category_chart.getAnimator(), budget_category_chart.getViewPortHandler()) {
-            @Override
-            public void drawExtras(Canvas c) {
-                super.drawExtras(c);
-
-                // Load ảnh
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_category_transport);
-
-                // Lấy trung tâm của PieChart
-                MPPointF center = budget_category_chart.getCenterCircleBox();
-
-                // Kích thước của lỗ trống
-                float holeRadius = budget_category_chart.getHoleRadius() / 100f * budget_category_chart.getRadius();
-
-                // Kích thước ảnh (tùy chỉnh nhỏ lại nếu cần)
-                int bitmapSize = (int) (holeRadius * 1.2f); // Đảm bảo ảnh vừa với lỗ trống
-                bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSize, bitmapSize, true);
-
-                // Tọa độ vẽ ảnh (trung tâm)
-                float x = center.x - (bitmap.getWidth() / 2f);
-                float y = center.y - (bitmap.getHeight() / 2f);
-
-                // Vẽ ảnh vào trung tâm
-                c.drawBitmap(bitmap, x, y, null);
-
-                // Giải phóng bộ nhớ
-                MPPointF.recycleInstance(center);
-            }
-        });
-        budget_category_chart.invalidate(); // Refresh PieChart
     }
 
 }

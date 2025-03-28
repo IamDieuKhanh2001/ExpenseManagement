@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.khanh.expensemanagement.ApplicationProperties;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.util.DateTimeUtil;
+import com.khanh.expensemanagement.util.LangUtil;
 import com.khanh.expensemanagement.util.SqliteUtil;
 import com.khanh.expensemanagement.util.db.SqlParamsUtil;
 
@@ -55,6 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "name_ident_note" + " TEXT NOT NULL, " +
                 "name_display_seq" + " INTEGER NOT NULL, " +
                 "name_ss_ja" + " TEXT NOT NULL, " +
+                "name_ss_en" + " TEXT NOT NULL, " +
+                "name_ss_vi" + " TEXT NOT NULL, " +
                 "name_rk" + " TEXT NOT NULL, " +
                 "drawable_icon_url" + " TEXT, " +
                 "ins_dttm" + " TEXT, " +
@@ -87,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor mNameFindAll(String nameIdentCd) {
-        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss_ja, drawable_icon_url" +
+        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss_" + LangUtil.getSavedLanguage(context) + ", drawable_icon_url" +
                 " FROM " + TABLE_M_NAME +
                 " WHERE m_name.name_ident_cd = ?" +
                 " ORDER BY m_name.name_display_seq ASC";
@@ -102,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor mNameSelectByUk1(String nameIdentCd, String nameCd) {
 
-        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss_ja, drawable_icon_url" +
+        String query = "SELECT " + "name_ident_cd, name_cd, name_ident_name, name_ss_" + LangUtil.getSavedLanguage(context) + ", drawable_icon_url" +
                 " FROM " + TABLE_M_NAME +
                 " WHERE m_name.name_ident_cd = ?" +
                 " AND m_name.name_cd = ? ";
@@ -137,7 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor budgetCategoryFindAll() {
 
-        String query = "SELECT budgets.id, limit_amount, category_id, budgets.ins_dttm, budgets.upd_dttm, m_name.name_ss_ja, m_name.drawable_icon_url" +
+        String query = "SELECT budgets.id, limit_amount, category_id, budgets.ins_dttm, budgets.upd_dttm, m_name.name_ss_" + LangUtil.getSavedLanguage(context) + ", m_name.drawable_icon_url" +
                 " FROM budgets" +
                 " LEFT JOIN m_name" +
                 " ON budgets.category_id = m_name.name_cd" +
