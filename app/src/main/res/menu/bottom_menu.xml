@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/home"
-        android:title="Home"
+        android:title="@string/main_tab_1"
         android:icon="@drawable/baseline_home_24"/>
 
     <item
         android:id="@+id/budget"
-        android:title="Budget"
+        android:title="@string/main_tab_2"
         android:icon="@drawable/baseline_currency_yen_24"
         />
 
@@ -18,11 +18,11 @@
 
     <item
         android:id="@+id/subscriptions"
-        android:title="tab3"
+        android:title="@string/main_tab_3"
         android:icon="@drawable/baseline_cast_connected_24" />
     <item
         android:id="@+id/settings"
-        android:title="Settings"
+        android:title="@string/main_tab_4"
         android:icon="@drawable/baseline_settings_24" />
 
 </menu>

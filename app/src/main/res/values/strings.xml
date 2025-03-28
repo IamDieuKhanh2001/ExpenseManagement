@@ -1,7 +1,28 @@
 <resources>
+    <!-- General -->
     <string name="app_name">ExpenseManagement</string>
+    <!-- Home activity -->
+    <string name="main_tab_1">Home</string>
+    <string name="main_tab_2">Budget</string>
+    <string name="main_tab_3">Naiji</string>
+    <string name="main_tab_4">Settings</string>
+    <string name="main_float_btn_name">Add Trans</string>
+    <!-- Home fragment -->
+    <string name="calendar_col_1_title">SUN</string>
+    <string name="calendar_col_2_title">MON</string>
+    <string name="calendar_col_3_title">TUE</string>
+    <string name="calendar_col_4_title">WED</string>
+    <string name="calendar_col_5_title">THUR</string>
+    <string name="calendar_col_6_title">FRI</string>
+    <string name="calendar_col_7_title">SAT</string>
     <string name="transaction_history_title">Transactions on %1$s</string>
     <string name="transaction_amount_currency">%1$s ＄</string>
+    <!-- Budget fragment -->
+    <string name="add_budget_btn">Add a budget</string>
+    <string name="total_budget_title">Total budget</string>
+    <string name="budget_category_title">Living expenses</string>
+    <string name="spent_amount_title">Spent</string>
+    <string name="budget_amount_title">Budget</string>
     <string name="over_spent">Overspent</string>
     <string name="remaining">Remaining</string>
     <string name="required">Required</string>

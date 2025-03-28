@@ -54,7 +54,7 @@
                     android:background="@android:color/transparent"
                     android:drawableLeft="@drawable/baseline_add_pink_24"
                     android:gravity="center_vertical|right"
-                    android:text="Add a budget"
+                    android:text="@string/add_budget_btn"
                     android:textColor="@color/pink"
                     android:textSize="12sp"
                     android:layout_marginLeft="30dp"
@@ -88,7 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
-                        android:text="Total budget"
+                        android:text="@string/total_budget_title"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -190,13 +190,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:gravity="center"
-                                    android:text="spent" />
+                                    android:text="@string/spent_amount_title" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:gravity="center"
-                                    android:text="Budget" />
+                                    android:text="@string/budget_amount_title" />
 
 
                             </TableRow>
@@ -247,7 +247,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:text="Living expenses"
+                    android:text="@string/budget_category_title"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

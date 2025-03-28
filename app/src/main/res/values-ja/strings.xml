@@ -1,7 +1,28 @@
 <resources>
+    <!-- General -->
     <string name="app_name">経費管理</string>
+    <!-- Home activity -->
+    <string name="main_tab_1">ホム</string>
+    <string name="main_tab_2">予算</string>
+    <string name="main_tab_3">内示</string>
+    <string name="main_tab_4">設定</string>
+    <string name="main_float_btn_name">取引作成</string>
+    <!-- Home fragment -->
+    <string name="calendar_col_1_title">日</string>
+    <string name="calendar_col_2_title">月</string>
+    <string name="calendar_col_3_title">火</string>
+    <string name="calendar_col_4_title">水</string>
+    <string name="calendar_col_5_title">木</string>
+    <string name="calendar_col_6_title">金</string>
+    <string name="calendar_col_7_title">土</string>
     <string name="transaction_history_title">%1$sの取引</string>
     <string name="transaction_amount_currency">%1$s 円</string>
+    <!-- Budget fragment -->
+    <string name="add_budget_btn">予算を追加する</string>
+    <string name="total_budget_title">総予算</string>
+    <string name="budget_category_title">生活費</string>
+    <string name="spent_amount_title">支払った</string>
+    <string name="budget_amount_title">予算の上限</string>
     <string name="over_spent">予算オーバー</string>
     <string name="remaining">残り</string>
     <string name="required">必須</string>

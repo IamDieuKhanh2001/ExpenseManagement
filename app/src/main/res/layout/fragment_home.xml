@@ -61,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SUN"
+                android:text="@string/calendar_col_1_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
@@ -70,7 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MON"
+                android:text="@string/calendar_col_2_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
@@ -79,7 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TUE"
+                android:text="@string/calendar_col_3_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
@@ -88,7 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="WED"
+                android:text="@string/calendar_col_4_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
@@ -97,7 +97,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="THUR"
+                android:text="@string/calendar_col_5_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
@@ -106,7 +106,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="FRI"
+                android:text="@string/calendar_col_6_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
@@ -115,7 +115,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SAT"
+                android:text="@string/calendar_col_7_title"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />

@@ -35,8 +35,6 @@ import java.util.Collections;
 
 public class HomeFragment extends Fragment implements CalendarAdapter.OnItemListener {
 
-    private final String FRAGMENT_TITLE = "Home";
-
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
@@ -58,9 +56,9 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        String FRAGMENT_TITLE = getString(R.string.main_tab_1);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
         databaseHelper = new DatabaseHelper(getActivity());
         FragmentUtil.setActionBarTitle(getActivity(), FRAGMENT_TITLE);
 
