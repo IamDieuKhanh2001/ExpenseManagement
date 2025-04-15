@@ -4,7 +4,7 @@
     <!-- Home activity -->
     <string name="main_tab_1">ホム</string>
     <string name="main_tab_2">予算</string>
-    <string name="main_tab_3">内示</string>
+    <string name="main_tab_3">概要</string>
     <string name="main_tab_4">設定</string>
     <string name="main_float_btn_name">取引作成</string>
     <!-- Home fragment -->

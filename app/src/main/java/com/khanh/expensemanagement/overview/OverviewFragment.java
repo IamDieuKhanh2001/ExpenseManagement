@@ -1,5 +1,6 @@
-package com.khanh.expensemanagement.naiji;
+package com.khanh.expensemanagement.overview;
 
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -11,10 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -22,115 +19,112 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
+import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
+import com.khanh.expensemanagement.util.SqliteUtil;
 
 import java.math.BigInteger;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NaijiFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class NaijiFragment extends Fragment {
+public class OverviewFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    DatabaseHelper databaseHelper;
+    PieChart pieChart;
+    RecyclerView category_recycler_view;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private EditText m_name_source;
-    private EditText m_name_category;
-    private RecyclerView m_name_recycler_view;
-    private TextView m_name_title;
-
-    private PieChart pieChart;
-    private PieChart budget_category_chart;
-    private RecyclerView category_recycler_view;
-
-    private RadioGroup language_radio_group;
-    private Button btn_save;
-
-    public NaijiFragment() {
+    public OverviewFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NaijiFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NaijiFragment newInstance(String param1, String param2) {
-        NaijiFragment fragment = new NaijiFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_naiji, container, false);
+        View view = inflater.inflate(R.layout.fragment_overview, container, false);
+        databaseHelper = new DatabaseHelper(getActivity());
         initWidgets(view);
+
         return view;
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        getDataDisplay();
+    }
+
     private void initWidgets(View view) {
+
+        pieChart = view.findViewById(R.id.pieChart);
 
         ArrayList<CategoryExpense> categoryExpenses = new ArrayList<>();
         categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
         categoryExpenses.add(new CategoryExpense(1, "Entertainment", BigInteger.valueOf(999999999)));
         categoryExpenses.add(new CategoryExpense(1, "Beauty", BigInteger.valueOf(999999999)));
         categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
 
         category_recycler_view = view.findViewById(R.id.category_recycler_view);
         CategoryExpenseAdapter categoryExpenseAdapter = new CategoryExpenseAdapter(requireContext(), getActivity(), categoryExpenses);
         category_recycler_view.setAdapter(categoryExpenseAdapter);
         category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
 
-        pieChart = view.findViewById(R.id.pieChart);
+    private void getDataDisplay() {
 
+        BigInteger categoryTotalSpent;
+
+        ArrayList<CategoryExpense> categoryExpenseList = new ArrayList<>();
+        Cursor cursor = databaseHelper.mNameFindAll(CategoryClass.NAME_IDENT_CD);
+
+        // Get category list
+        if (cursor != null && cursor.moveToFirst()) {
+
+            do {
+                categoryExpenseList.add(new CategoryExpense(cursor.getInt(1),cursor.getString(3), BigInteger.ZERO));
+            } while (cursor.moveToNext());
+        }
+
+        // Get total spent on category
+        for (CategoryExpense item : categoryExpenseList) {
+
+            categoryTotalSpent = databaseHelper.transactionTotalSpentOnMonth(YearMonth.now(), item.getId());
+            item.setTotalSpent(categoryTotalSpent);
+        }
+
+        // Setup pie data chart
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(53f, "Food"));
-        entries.add(new PieEntry(36f, "Entertainment"));
-        entries.add(new PieEntry(9f, "Beauty"));
-        entries.add(new PieEntry(20f, "Bills"));
-        entries.add(new PieEntry(1f, "Other"));
+        for (CategoryExpense item : categoryExpenseList) {
 
-        PieDataSet dataSet = new PieDataSet(entries, "");
+            // Hide category with spent amount on month is 0
+            if (!item.getTotalSpent().equals(BigInteger.ZERO)) {
+
+                entries.add(new PieEntry(item.getTotalSpent().floatValue(), item.getCategoryName()));
+            }
+        }
+        setExpenditurePieChart(entries);
+
+        // Release cursor used
+        SqliteUtil.releaseCursor(cursor);
+    }
+
+    private void setExpenditurePieChart(ArrayList<PieEntry> dataEntries) {
+
+        PieDataSet dataSet = new PieDataSet(dataEntries, "");
         List<Integer> colors = new ArrayList<>();
         colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorOrange));
         colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorRed));
         colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorPink));
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorGreen));
         colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorBlue));
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorGreen));
+        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorYellow));
         dataSet.setColors(colors);
         dataSet.setValueTextSize(12f);
 
@@ -169,7 +163,6 @@ public class NaijiFragment extends Fragment {
         dataSet.setValueLinePart2Length(0.4f); // Độ dài đoạn sau
         dataSet.setValueLineWidth(2f); // Độ dày đường
         dataSet.setValueLineColor(Color.BLACK); // Màu của đường dẫn
-
     }
 
 }

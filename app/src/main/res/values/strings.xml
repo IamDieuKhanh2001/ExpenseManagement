@@ -4,7 +4,7 @@
     <!-- Home activity -->
     <string name="main_tab_1">Home</string>
     <string name="main_tab_2">Budget</string>
-    <string name="main_tab_3">Naiji</string>
+    <string name="main_tab_3">Overview</string>
     <string name="main_tab_4">Settings</string>
     <string name="main_float_btn_name">Add Trans</string>
     <!-- Home fragment -->

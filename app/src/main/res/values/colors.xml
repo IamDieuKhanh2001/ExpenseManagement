@@ -15,8 +15,9 @@
     <color name="pieChartColorOrange">#f29557</color>
     <color name="pieChartColorRed">#E91E63</color>
     <color name="pieChartColorPink">#f78de6</color>
-    <color name="pieChartColorGreen">#23c44e</color>
     <color name="pieChartColorBlue">#6c5df5</color>
+    <color name="pieChartColorGreen">#23c44e</color>
+    <color name="pieChartColorYellow">#cdf505</color>
 
     <color name="budgetChartColor">#23c44e</color>
 </resources>

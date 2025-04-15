@@ -8,7 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
-import com.khanh.expensemanagement.naiji.NaijiFragment;
+import com.khanh.expensemanagement.overview.OverviewFragment;
 import com.khanh.expensemanagement.settings.SettingsFragment;
 import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.FragmentUtil;
@@ -27,7 +27,7 @@ public class HomeActivity extends BaseActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
 
-        FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
+        FragmentUtil.replaceFragment(getSupportFragmentManager(), new OverviewFragment());
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -37,9 +37,9 @@ public class HomeActivity extends BaseActivity {
             } else if (item.getItemId() == R.id.budget) {
 
                 FragmentUtil.replaceFragment(getSupportFragmentManager(), new BudgetFragment());
-            } else if (item.getItemId() == R.id.subscriptions) {
+            } else if (item.getItemId() == R.id.overview) {
 
-                FragmentUtil.replaceFragment(getSupportFragmentManager(), new NaijiFragment());
+                FragmentUtil.replaceFragment(getSupportFragmentManager(), new OverviewFragment());
             } else if (item.getItemId() == R.id.settings) {
 
                 FragmentUtil.replaceFragment(getSupportFragmentManager(), new SettingsFragment());
