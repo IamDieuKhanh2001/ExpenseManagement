@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +21,13 @@ import com.khanh.expensemanagement.m_name.kbn.SourcePaymentClass;
 import com.khanh.expensemanagement.util.ActivityUtil;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
+import com.khanh.expensemanagement.util.FormUtil;
 
 public class TransRegisterActivity extends BaseActivity {
 
     private final String ACTIVITY_TITLE = "Add expense";
 
+    String intentSelectedDate = "";
     EditText amount;
     CustomSelectBox m_name_category;
     EditText date;
@@ -41,6 +44,8 @@ public class TransRegisterActivity extends BaseActivity {
         ActivityUtil.enableActionBar(this, ACTIVITY_TITLE);
         databaseHelper = new DatabaseHelper(this);
         initWidgets();
+        getIntentData();
+        getFormData();
         initTextWatcher();
     }
 
@@ -77,9 +82,21 @@ public class TransRegisterActivity extends BaseActivity {
             databaseHelper.registerTransaction(Integer.valueOf(amount.getText().toString()), note.getText().toString(), m_name_category.getSelectedId(), date.getText().toString(), m_name_source.getSelectedId());
             // Back to home
             Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         });
+    }
+
+    private void getIntentData() {
+
+        Intent intent = getIntent();
+        intentSelectedDate = FormUtil.fncNE(intent.getStringExtra("selectedDate"));
+    }
+
+    private void getFormData() {
+
+        date.setText(intentSelectedDate);
     }
 
     private void initTextWatcher() {

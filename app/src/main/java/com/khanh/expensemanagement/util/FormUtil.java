@@ -8,14 +8,19 @@ import com.khanh.expensemanagement.R;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class FormUtil {
 
     public static String fncNS(String prmValue) {
         if (prmValue == null || prmValue.trim().isEmpty()) {
             return " ";
+        }
+        return prmValue;
+    }
+
+    public static String fncNE(String prmValue) {
+        if (prmValue == null || prmValue.trim().isEmpty()) {
+            return "";
         }
         return prmValue;
     }

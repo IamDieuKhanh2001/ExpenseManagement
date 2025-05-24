@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.trans_mainte.TransDetailActivity;
+import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
@@ -30,7 +31,6 @@ import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private TextView transaction_history_title;
     private RecyclerView transaction_recycler_view;
     private LinearLayout empty_layout;
+    private Button note_transaction_btn;
     DatabaseHelper databaseHelper;
 
     ArrayList<Integer> totalAmountInDateArray = new ArrayList<>(Collections.nCopies(42, 0));
@@ -140,7 +141,12 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         transaction_history_title = view.findViewById(R.id.transaction_history_title);
         transaction_recycler_view = view.findViewById(R.id.transaction_recycler_view);
         empty_layout = view.findViewById(R.id.empty_layout);
-
+        note_transaction_btn = view.findViewById(R.id.note_transaction_btn);
+        note_transaction_btn.setOnClickListener(noteBtnView -> {
+            Intent intent = new Intent(getActivity(), TransRegisterActivity.class);
+            intent.putExtra("selectedDate", DateTimeUtil.dateToString(selectedDate, "yyyy-MM-dd"));
+            startActivity(intent);
+        });
         previous_month_btn.setOnClickListener(view1 -> {
             selectedDate = selectedDate.minusMonths(1);
             selectedDate = selectedDate.withDayOfMonth(1);
@@ -216,6 +222,10 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         String dateMonth = String.valueOf(selectedDate).substring(5, 7) + "/" + String.valueOf(selectedDate).substring(8);
         String formattedText = getString(R.string.transaction_history_title, dateMonth);
 
+        if(Objects.equals(selectedDate, LocalDate.now())) {
+
+            formattedText += getString(R.string.current_date);
+        }
         // Gán chuỗi đã định dạng vào TextView
         transaction_history_title.setText(formattedText);
     }

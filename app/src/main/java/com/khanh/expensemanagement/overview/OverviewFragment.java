@@ -1,5 +1,6 @@
 package com.khanh.expensemanagement.overview;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
+import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;
 import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
@@ -43,6 +45,7 @@ public class OverviewFragment extends Fragment {
     private Button previous_month_btn;
     private Button next_month_btn;
     private LinearLayout empty_layout;
+    private Button note_transaction_btn;
     private PieChart pieChart;
     private TextView month_total_spent;
     private RecyclerView category_recycler_view;
@@ -91,6 +94,11 @@ public class OverviewFragment extends Fragment {
             onResume();
         });
         empty_layout = view.findViewById(R.id.empty_layout);
+        note_transaction_btn = view.findViewById(R.id.note_transaction_btn);
+        note_transaction_btn.setOnClickListener(noteBtnView -> {
+            Intent intent = new Intent(getActivity(), TransRegisterActivity.class);
+            startActivity(intent);
+        });
         pieChart = view.findViewById(R.id.pieChart);
         month_total_spent = view.findViewById(R.id.month_total_spent);
         category_recycler_view = view.findViewById(R.id.category_recycler_view);

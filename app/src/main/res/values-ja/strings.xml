@@ -29,4 +29,5 @@
     <string name="budget_header_note">月末まであと%1$s日です。</string>
     <!-- Share -->
     <string name="current_year_month">(今)</string>
+    <string name="current_date">(今日)</string>
 </resources>
