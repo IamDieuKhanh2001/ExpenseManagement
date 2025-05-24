@@ -43,8 +43,6 @@ import java.util.List;
 
 public class BudgetFragment extends Fragment {
 
-    private final String FRAGMENT_TITLE = "Budget";
-
     TextView year_month_tv;
     TextView budget_header_note;
     Button add_budget_btn;
@@ -72,6 +70,8 @@ public class BudgetFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        String FRAGMENT_TITLE = getString(R.string.main_tab_2);
         FragmentUtil.setActionBarTitle(getActivity(), FRAGMENT_TITLE);
 
         // Inflate the layout for this fragment

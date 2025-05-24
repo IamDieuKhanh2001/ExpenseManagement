@@ -27,7 +27,7 @@ public class HomeActivity extends BaseActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
 
-        FragmentUtil.replaceFragment(getSupportFragmentManager(), new OverviewFragment());
+        FragmentUtil.replaceFragment(getSupportFragmentManager(), new HomeFragment());
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 

@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.khanh.expensemanagement.R;
 import com.khanh.expensemanagement.m_name.kbn.CategoryClass;
 import com.khanh.expensemanagement.trans_mainte.TransDetailActivity;
+import com.khanh.expensemanagement.util.DateTimeUtil;
 import com.khanh.expensemanagement.util.FormUtil;
 import com.khanh.expensemanagement.util.FragmentUtil;
 import com.khanh.expensemanagement.domain.db.DatabaseHelper;
@@ -32,6 +33,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment implements CalendarAdapter.OnItemListener {
 
@@ -139,32 +141,35 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         transaction_recycler_view = view.findViewById(R.id.transaction_recycler_view);
         empty_layout = view.findViewById(R.id.empty_layout);
 
-        previous_month_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedDate = selectedDate.minusMonths(1);
-                selectedDate = selectedDate.withDayOfMonth(1);
-                setMonthView();
-                onResume();
-            }
+        previous_month_btn.setOnClickListener(view1 -> {
+            selectedDate = selectedDate.minusMonths(1);
+            selectedDate = selectedDate.withDayOfMonth(1);
+            setMonthView();
+            onResume();
         });
-        next_month_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedDate = selectedDate.plusMonths(1);
-                selectedDate = selectedDate.withDayOfMonth(1);
-                setMonthView();
-                onResume();
-            }
+        next_month_btn.setOnClickListener(view2 -> {
+            selectedDate = selectedDate.plusMonths(1);
+            selectedDate = selectedDate.withDayOfMonth(1);
+            setMonthView();
+            onResume();
         });
     }
 
     private void setMonthView() {
 
+        String selectedYMTitle;
+        String selectedYMTitleFormat = "MMMM yyyy";
+
         totalAmountInDateArray = new ArrayList<>(Collections.nCopies(42, 0));
         getDataAmount();
 
-        monthYearText.setText(monthYearFromDate(selectedDate));
+        selectedYMTitle = DateTimeUtil.dateToString(selectedDate, selectedYMTitleFormat);
+        // Add (now) mark for current year month
+        if(Objects.equals(YearMonth.from(selectedDate), YearMonth.now())) {
+
+            selectedYMTitle += getString(R.string.current_year_month);
+        }
+        monthYearText.setText(selectedYMTitle);
 
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
@@ -203,12 +208,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
             }
         }
         return daysInMonthArray;
-    }
-
-    private String monthYearFromDate(LocalDate date) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-        return date.format(formatter);
     }
 
     private void createTransactionHistoryTitle() {

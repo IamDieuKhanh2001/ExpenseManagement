@@ -27,4 +27,6 @@
     <string name="remaining">Remaining</string>
     <string name="required">Required</string>
     <string name="budget_header_note">%1$s days left till the end of this month</string>
+    <!-- Share -->
+    <string name="current_year_month">(Now)</string>
 </resources>

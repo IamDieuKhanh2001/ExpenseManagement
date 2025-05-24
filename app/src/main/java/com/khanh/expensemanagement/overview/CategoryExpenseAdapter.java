@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.util.FormUtil;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,11 @@ class CategoryExpenseAdapter extends RecyclerView.Adapter<CategoryExpenseViewHol
     @Override
     public void onBindViewHolder(@NonNull CategoryExpenseViewHolder holder, int position) {
 
+        String monthTotalSpentText;
         holder.category_name.setText(categoryExpenseList.get(position).getCategoryName());
-        holder.total_spent.setText(categoryExpenseList.get(position).getTotalSpent().toString());
+        monthTotalSpentText = categoryExpenseList.get(position).getTotalSpent().toString();
+        monthTotalSpentText = FormUtil.fncDecFormat(monthTotalSpentText);
+        holder.total_spent.setText(context.getString(R.string.transaction_amount_currency, monthTotalSpentText));
     }
 
     @Override

@@ -135,7 +135,7 @@
         android:orientation="vertical"
         android:paddingTop="5sp"
         android:paddingLeft="10sp"
-        android:paddingRight="10sp">
+        android:paddingRight="10sp" >
 
         <TextView
             android:id="@+id/transaction_history_title"
@@ -154,20 +154,16 @@
         <LinearLayout
             android:id="@+id/empty_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="300dp"
             android:orientation="vertical"
             android:paddingLeft="5sp"
             android:paddingTop="5sp"
-            android:paddingRight="5sp"
-            android:visibility="gone">
+            android:paddingRight="5sp">
 
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_empty" />
 
             <TextView
@@ -179,6 +175,15 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/note_transaction_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:text="Note your transaction"
+                android:textAllCaps="false"
+                android:textSize="15sp" />
         </LinearLayout>
 
 

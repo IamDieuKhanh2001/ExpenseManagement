@@ -6,6 +6,8 @@ import android.content.Context;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -62,4 +64,33 @@ public class DateTimeUtil {
         datePickerDialog.show();
     }
 
+    public static String dateToString(LocalDate date, String dateFormat) {
+
+        String result;
+        try {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+            result = date.format(formatter);
+            return result;
+        } catch (Exception e) {
+
+            result = "";
+            return result;
+        }
+    }
+
+    public static String dateToString(LocalDate date) {
+
+        String result;
+        try {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMMM/yyyy");
+            result = date.format(formatter);
+            return result;
+        } catch (Exception e) {
+
+            result = "";
+            return result;
+        }
+    }
 }

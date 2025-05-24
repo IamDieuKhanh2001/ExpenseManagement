@@ -5,21 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:paddingLeft="10sp"
-    android:paddingTop="5sp"
-    android:paddingRight="10sp"
     android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingLeft="10sp"
+        android:paddingTop="5sp"
+        android:paddingRight="10sp"
+        android:layout_marginBottom="100sp"
         tools:context=".overview.OverviewFragment">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
             android:background="@android:color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
@@ -75,6 +76,42 @@
                     android:id="@+id/pieChart"
                     android:layout_width="match_parent"
                     android:layout_height="300dp" />
+
+                <LinearLayout
+                    android:id="@+id/empty_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="5sp"
+                    android:paddingTop="5sp"
+                    android:paddingRight="5sp">
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_empty" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No transaction during this time"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/note_transaction_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="center"
+                        android:text="Note your transaction"
+                        android:textAllCaps="false"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -83,7 +120,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="10dp"
             android:background="@android:color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
@@ -119,7 +156,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/total_spent"
+                        android:id="@+id/month_total_spent"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
@@ -136,7 +173,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@android:color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">

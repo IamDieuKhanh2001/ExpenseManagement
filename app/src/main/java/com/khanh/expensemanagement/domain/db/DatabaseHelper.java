@@ -237,6 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public BigInteger transactionTotalSpentOnMonth(YearMonth yearMonth) {
 
+        // Null category id is get total spent in month
         return transactionTotalSpentOnMonth(yearMonth, null);
     }
 
@@ -248,6 +249,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " WHERE transaction_dt LIKE ?";
         if (categoryId != null) {
 
+            // Get total spent in specific category
             query += " AND category_id IS " + categoryId;
         }
 

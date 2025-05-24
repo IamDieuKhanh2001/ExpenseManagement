@@ -66,7 +66,7 @@
             android:id="@+id/card_total_budget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
             android:background="@android:color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
@@ -232,7 +232,7 @@
             android:id="@+id/card_budget_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="10dp"
             android:background="@android:color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
