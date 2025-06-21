@@ -27,3 +27,11 @@ Keihi kanri app is a mobile-first personal finance application that helps you tr
 <p align="left">
   <img src="screenshots/screenshot_git.png" width="50%" alt="Get app apk">
 </p>
+2. Click at ExpenseManagement_keihiKanri.apk to download
+<p align="left">
+  <img src="screenshots/screenshot_git2.png" width="50%" alt="Get app apk">
+</p>
+3. Click confirm install, thanks for download 🥰🥰🥰
+<p align="left">
+  <img src="screenshots/screenshot_install.png" width="50%" alt="Get app apk">
+</p>
