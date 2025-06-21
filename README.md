@@ -18,12 +18,12 @@ Keihi kanri app is a mobile-first personal finance application that helps you tr
 - 🌍 **Supports language**: English, Japanese, Vietnamese
 
 ## Screenshots
-<p align="center">
-  <img src="screenshots/screenshot_git.png" width="23%" alt="Get app apk">
+<p align="left">
+  <img src="screenshots/screenshot_git.png" width="50%" alt="Get app apk">
 </p>
 
 ## Installation
 1. Get apk installation at github https://github.com/IamDieuKhanh2001/ExpenseManagement
-<p align="center">
-  <img src="screenshots/screenshot_git.png" width="23%" alt="Get app apk">
+<p align="left">
+  <img src="screenshots/screenshot_git.png" width="50%" alt="Get app apk">
 </p>
