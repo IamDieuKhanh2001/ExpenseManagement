@@ -33,5 +33,5 @@ Keihi kanri app is a mobile-first personal finance application that helps you tr
 </p>
 3. Click confirm install, thanks for download 🥰🥰🥰
 <p align="left">
-  <img src="screenshots/screenshot_install.png" width="50%" alt="Get app apk">
+  <img src="screenshots/screenshot_install.png" width="20%" alt="Get app apk">
 </p>
