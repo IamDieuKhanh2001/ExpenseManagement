@@ -1,6 +1,6 @@
 # Keihi kanri app - Personal Finance Manager
 
-<img src="/app/src/main/res/mipmap-xxxhdpi/ic_launcher_main.webp" width="50%" alt="App icon">
+<img src="/app/src/main/res/mipmap-xxxhdpi/ic_launcher_main.webp" width="10%" alt="App icon">
 
 Keihi kanri app is a mobile-first personal finance application that helps you track expenses, analyze spending patterns, and achieve financial goals.
 
