@@ -1,6 +1,6 @@
 # Keihi kanri app - Personal Finance Manager
 
-![App Icon](https://via.placeholder.com/100/4CAF50/FFFFFF?text=%F0%9F%92%B0%F0%9F%93%88)
+<img src="/app/src/main/res/mipmap-xxxhdpi/ic_launcher_main.webp" width="50%" alt="App icon">
 
 Keihi kanri app is a mobile-first personal finance application that helps you track expenses, analyze spending patterns, and achieve financial goals.
 
@@ -8,8 +8,6 @@ Keihi kanri app is a mobile-first personal finance application that helps you tr
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Installation](#installation)
-- [Tech Stack](#tech-stack)
-- [Support](#support)
 
 ## Current Features (Update more in future)
 - 💸 **Expense Tracking**: Add expenses with categories
@@ -19,7 +17,9 @@ Keihi kanri app is a mobile-first personal finance application that helps you tr
 
 ## Screenshots
 <p align="left">
-  <img src="screenshots/screenshot_git.png" width="50%" alt="Get app apk">
+  <img src="screenshots/screenshot_home.png" width="75%" alt="Get app apk">
+  <img src="screenshots/screenshot_budget.png" width="75%" alt="Get app apk">
+  <img src="screenshots/screenshot_overview.png" width="75%" alt="Get app apk">
 </p>
 
 ## Installation
