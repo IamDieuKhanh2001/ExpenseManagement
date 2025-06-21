@@ -6,7 +6,7 @@ public class ApplicationProperties {
     public static final String DATABASE_NAME = "ExpenseManagement.db";
 
     // Database version number
-    public static final Integer DATABASE_VERSION = 7;
+    public static final Integer DATABASE_VERSION = 8;
 
     // Log file save at
     public static final String LOG_DIR = "Download/ExpenseManagement";
