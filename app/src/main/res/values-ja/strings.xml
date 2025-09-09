@@ -17,6 +17,8 @@
     <string name="calendar_col_7_title">土</string>
     <string name="transaction_history_title">%1$sの取引</string>
     <string name="transaction_amount_currency">%1$s 円</string>
+    <string name="collapse">隠す</string>
+    <string name="open">開く</string>
     <!-- Budget fragment -->
     <string name="add_budget_btn">予算を追加する</string>
     <string name="total_budget_title">総予算</string>

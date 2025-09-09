@@ -235,6 +235,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor transactionExcelData() {
+
+        String query = "SELECT " + "transactions.id, amount, note, category_id, m_name_category.name_ss_en, transaction_dt, source_id, m_name_source.name_ss_en, transactions.ins_dttm, transactions.upd_dttm" +
+                " FROM " + TABLE_TRANSACTION +
+                " LEFT JOIN m_name AS m_name_category" +
+                " on m_name_category.name_ident_cd = 'categoryKbn' AND m_name_category.name_cd = transactions.category_id" +
+                " LEFT JOIN m_name AS m_name_source" +
+                " on m_name_source.name_ident_cd = 'sourcePaymentKbn' AND m_name_source.name_cd = transactions.source_id" +
+                " ORDER BY transactions.ins_dttm DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+
+            cursor = db.rawQuery(query, new String[]{});
+        }
+        return cursor;
+    }
+
+    public Cursor transactionExcelData(YearMonth yearMonth) {
+
+        String query = "SELECT " + "transactions.id, amount, note, category_id, m_name_category.name_ss_en, transaction_dt, source_id, m_name_source.name_ss_en, transactions.ins_dttm, transactions.upd_dttm" +
+                " FROM " + TABLE_TRANSACTION +
+                " LEFT JOIN m_name AS m_name_category" +
+                " on m_name_category.name_ident_cd = 'categoryKbn' AND m_name_category.name_cd = transactions.category_id" +
+                " LEFT JOIN m_name AS m_name_source" +
+                " on m_name_source.name_ident_cd = 'sourcePaymentKbn' AND m_name_source.name_cd = transactions.source_id" +
+                " WHERE transaction_dt LIKE ?" +
+                " ORDER BY ins_dttm DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+
+            cursor = db.rawQuery(query, new String[]{SqlParamsUtil.forward(yearMonth.toString())});
+        }
+        return cursor;
+    }
+
     public BigInteger transactionTotalSpentOnMonth(YearMonth yearMonth) {
 
         // Null category id is get total spent in month

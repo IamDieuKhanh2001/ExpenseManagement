@@ -17,6 +17,8 @@
     <string name="calendar_col_7_title">SAT</string>
     <string name="transaction_history_title">Transactions on %1$s</string>
     <string name="transaction_amount_currency">%1$s ＄</string>
+    <string name="collapse">Collapse</string>
+    <string name="open">Open</string>
     <!-- Budget fragment -->
     <string name="add_budget_btn">Add a budget</string>
     <string name="total_budget_title">Total budget</string>

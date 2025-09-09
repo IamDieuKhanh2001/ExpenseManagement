@@ -1,5 +1,6 @@
 package com.khanh.expensemanagement.naiji;
 
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -22,7 +23,18 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.khanh.expensemanagement.R;
+import com.khanh.expensemanagement.domain.db.DatabaseHelper;
 
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import android.os.Environment;
+import android.widget.Toast;
+
+import org.apache.poi.ss.usermodel.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +66,8 @@ public class NaijiFragment extends Fragment {
 
     private RadioGroup language_radio_group;
     private Button btn_save;
+    private Button excelBtn;
+    DatabaseHelper databaseHelper;
 
     public NaijiFragment() {
         // Required empty public constructor
@@ -91,85 +105,96 @@ public class NaijiFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_naiji, container, false);
+        databaseHelper = new DatabaseHelper(getActivity());
         initWidgets(view);
         return view;
     }
 
+    public void exportExcel(List<ExcelDownloadData> list) {
+
+        try {
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Demo excel");
+
+            List<String> headerColList = new ArrayList<>();
+            headerColList.add("Transaction Id");
+            headerColList.add("Transaction date");
+            headerColList.add("Amount");
+            headerColList.add("Note");
+            headerColList.add("Category id");
+            headerColList.add("Category title");
+            headerColList.add("Source id");
+            headerColList.add("Source name");
+            headerColList.add("Create at");
+            headerColList.add("Update at");
+
+
+            Row header = sheet.createRow(0);
+            for (int i = 0; i < headerColList.size(); i++) {
+
+                header.createCell(i).setCellValue(headerColList.get(i));
+            }
+
+            int rowIndex = 1;
+            for (ExcelDownloadData data : list) {
+
+                Row row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(data.getTransactionId());
+                row.createCell(1).setCellValue(data.getTransactionDt());
+                row.createCell(2).setCellValue(data.getAmount());
+                row.createCell(3).setCellValue(data.getNote());
+                row.createCell(4).setCellValue(data.getCategoryId());
+                row.createCell(5).setCellValue(data.getCategoryTitle());
+                row.createCell(6).setCellValue(data.getSourceId());
+                row.createCell(7).setCellValue(data.getSourceName());
+                row.createCell(8).setCellValue(data.getInsDttm());
+                row.createCell(9).setCellValue(data.getUpdDttm());
+            }
+
+            File file = new File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "demo.xlsx"
+            );
+
+            FileOutputStream out = new FileOutputStream(file);
+            workbook.write(out);
+            out.close();
+            workbook.close();
+            Toast.makeText(getContext(), "Xuất thành công: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Xuất thất bại", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void initWidgets(View view) {
 
-        ArrayList<CategoryExpense> categoryExpenses = new ArrayList<>();
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Entertainment", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Beauty", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
-        categoryExpenses.add(new CategoryExpense(1, "Food", BigInteger.valueOf(999999999)));
 
-        category_recycler_view = view.findViewById(R.id.category_recycler_view);
-        CategoryExpenseAdapter categoryExpenseAdapter = new CategoryExpenseAdapter(requireContext(), getActivity(), categoryExpenses);
-        category_recycler_view.setAdapter(categoryExpenseAdapter);
-        category_recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        excelBtn = view.findViewById(R.id.excelBtn);
+        excelBtn.setOnClickListener(view1 -> {
 
-        pieChart = view.findViewById(R.id.pieChart);
+            ArrayList<ExcelDownloadData> excelDownloadData = new ArrayList<>();
+            Cursor cursor = databaseHelper.transactionExcelData();
+            if (cursor != null && cursor.moveToFirst()) {
 
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(53f, "Food"));
-        entries.add(new PieEntry(36f, "Entertainment"));
-        entries.add(new PieEntry(9f, "Beauty"));
-        entries.add(new PieEntry(20f, "Bills"));
-        entries.add(new PieEntry(1f, "Other"));
+                do {
 
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        List<Integer> colors = new ArrayList<>();
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorOrange));
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorRed));
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorPink));
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorGreen));
-        colors.add(ContextCompat.getColor(getContext(), R.color.pieChartColorBlue));
-        dataSet.setColors(colors);
-        dataSet.setValueTextSize(12f);
-
-        PieData pieData = new PieData(dataSet);
-        pieChart.setData(pieData);
-        pieChart.setExtraOffsets(10, 10, 10, 10);
-        pieChart.getDescription().setEnabled(false); // Ẩn description
-        pieChart.setEntryLabelTextSize(14f);
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.animateY(1000); // Animation
-        pieChart.invalidate(); // Refresh chart
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleRadius(45f);
-        pieChart.setTransparentCircleRadius(51f);
-        pieChart.setRotationEnabled(false);
-        pieData.setValueFormatter(new PercentFormatter(pieChart));
-        pieChart.setUsePercentValues(true);
-
-
-//        pieChart.setDrawEntryLabels(true);
-//        // Màu chữ của nhãn (ví dụ: màu đen)
-//        pieChart.setEntryLabelColor(Color.BLACK);
-//
-//        // Kích thước chữ của nhãn (đơn vị: sp)
-//        pieChart.setEntryLabelTextSize(12f);
-//
-//        // Kiểu chữ (tuỳ chọn)
-//        pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD);
-
-        // Hiển thị label (tiêu đề) bên ngoài
-        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-
-        // Tạo đường dẫn từ label đến biểu đồ (dạng mũi tên)
-        dataSet.setValueLinePart1Length(0.5f); // Độ dài đoạn đầu
-        dataSet.setValueLinePart2Length(0.4f); // Độ dài đoạn sau
-        dataSet.setValueLineWidth(2f); // Độ dày đường
-        dataSet.setValueLineColor(Color.BLACK); // Màu của đường dẫn
-
+                    ExcelDownloadData data = new ExcelDownloadData();
+                    data.setTransactionId(cursor.getInt(0));
+                    data.setAmount(cursor.getInt(1));
+                    data.setNote(cursor.getString(2));
+                    data.setCategoryId(cursor.getInt(3));
+                    data.setCategoryTitle(cursor.getString(4));
+                    data.setTransactionDt(cursor.getString(5));
+                    data.setSourceId(cursor.getInt(6));
+                    data.setSourceName(cursor.getString(7));
+                    data.setInsDttm(cursor.getString(8));
+                    data.setUpdDttm(cursor.getString(9));
+                    excelDownloadData.add(data);
+                } while (cursor.moveToNext());
+            }
+            exportExcel(excelDownloadData);
+        });
     }
 
 }

@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khanh.expensemanagement.budget.BudgetFragment;
 import com.khanh.expensemanagement.home.HomeFragment;
+import com.khanh.expensemanagement.naiji.NaijiFragment;
 import com.khanh.expensemanagement.overview.OverviewFragment;
 import com.khanh.expensemanagement.settings.SettingsFragment;
 import com.khanh.expensemanagement.trans_mainte.TransRegisterActivity;

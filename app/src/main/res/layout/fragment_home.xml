@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="100sp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -127,67 +128,88 @@
             android:id="@+id/calendarRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="350dp" />
+
+        <Button
+            android:id="@+id/toggleCalendarBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="0dp"
+            android:background="@android:color/transparent"
+            android:minWidth="50dp"
+            android:minHeight="30dp"
+            android:padding="0dp"
+            android:text="@string/collapse"
+            android:textColor="@color/black"
+            android:textSize="13dp" />
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="330dp"
-        android:orientation="vertical"
-        android:paddingTop="5sp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp" >
-
-        <TextView
-            android:id="@+id/transaction_history_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/transaction_history_title"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/transaction_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:id="@+id/empty_layout"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="5sp"
+            android:paddingLeft="10sp"
             android:paddingTop="5sp"
-            android:paddingRight="5sp">
-
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_empty" />
+            android:paddingRight="10sp">
 
             <TextView
+                android:id="@+id/transaction_history_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No transaction during this time"
-                android:textAlignment="center"
-                android:textColor="@color/gray"
-                android:textSize="15sp"
+                android:text="@string/transaction_history_title"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/note_transaction_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="center"
-                android:text="Note your transaction"
-                android:textAllCaps="false"
-                android:textSize="15sp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/transaction_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/empty_layout"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="vertical"
+                android:paddingLeft="5sp"
+                android:paddingTop="5sp"
+                android:paddingRight="5sp">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_empty" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No transaction during this time"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/note_transaction_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:text="Note your transaction"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
 

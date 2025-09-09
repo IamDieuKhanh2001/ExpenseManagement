@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private RecyclerView transaction_recycler_view;
     private LinearLayout empty_layout;
     private Button note_transaction_btn;
+    private Button toggleCalendarBtn;
     DatabaseHelper databaseHelper;
 
     ArrayList<Integer> totalAmountInDateArray = new ArrayList<>(Collections.nCopies(42, 0));
@@ -142,6 +143,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         transaction_recycler_view = view.findViewById(R.id.transaction_recycler_view);
         empty_layout = view.findViewById(R.id.empty_layout);
         note_transaction_btn = view.findViewById(R.id.note_transaction_btn);
+        toggleCalendarBtn = view.findViewById(R.id.toggleCalendarBtn);
         note_transaction_btn.setOnClickListener(noteBtnView -> {
             Intent intent = new Intent(getActivity(), TransRegisterActivity.class);
             intent.putExtra("selectedDate", DateTimeUtil.dateToString(selectedDate, "yyyy-MM-dd"));
@@ -158,6 +160,19 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
             selectedDate = selectedDate.withDayOfMonth(1);
             setMonthView();
             onResume();
+        });
+        toggleCalendarBtn.setOnClickListener(view3 -> {
+
+            if (calendarRecyclerView.getVisibility() == View.VISIBLE) {
+
+                toggleCalendarBtn.setText(getContext().getString(R.string.open));
+                calendarRecyclerView.setVisibility(View.GONE);
+            } else {
+
+                toggleCalendarBtn.setText(getContext().getString(R.string.collapse));
+                calendarRecyclerView.setVisibility(View.VISIBLE);
+            }
+
         });
     }
 
