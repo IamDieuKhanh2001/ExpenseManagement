@@ -83,21 +83,13 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
         calendarRecyclerView.post(() -> {
             // Wait for calendarRecyclerView completely create
-            RecyclerView.ViewHolder viewHolder = calendarRecyclerView.findViewHolderForAdapterPosition(previousSelectedPosition);
-            if (viewHolder != null) {
-
-                View itemView = viewHolder.itemView;
-                View viewById = itemView.findViewById(R.id.calendar_cell_layout);
-                viewById.setBackgroundResource(R.drawable.calendar_cell_border);
-                TextView cellDayText = itemView.findViewById(R.id.cellDayText);
-                cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.pink));
-            }
+            borderSelectedDate(previousSelectedPosition, true);
         });
     }
 
     public void getDataAmount() {
 
-        Integer totalAmountInDate = 0;
+        int totalAmountInDate;
 
         LocalDate firstDayOfMonth = selectedDate.withDayOfMonth(1);
         int dayOfWeek = firstDayOfMonth.getDayOfWeek().getValue();
@@ -107,26 +99,9 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         LocalDate currentDate = firstDayOfMonth;
         while (!currentDate.isAfter(lastDayOfMonth)) {
             // Gọi hàm truy vấn với từng ngày
-            Cursor cursor = databaseHelper.transactionFindByDate(currentDate);
-
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    int amountColIndex = cursor.getColumnIndex("amount");
-                    if (amountColIndex != -1) {
-
-                        Integer currentAmount = cursor.getInt(amountColIndex);
-                        totalAmountInDate += currentAmount;
-                    }
-                } while (cursor.moveToNext());
-            }
-
-            // Đóng cursor nếu không còn sử dụng
-            if (cursor != null) {
-                cursor.close();
-            }
+            totalAmountInDate = databaseHelper.transactionTotalAmountByDate(currentDate);
 
             totalAmountInDateArray.set(dayOfWeek + currentDate.getDayOfMonth() - 1, totalAmountInDate);
-            totalAmountInDate = 0;
 
             // Chuyển sang ngày tiếp theo
             currentDate = currentDate.plusDays(1);
@@ -206,7 +181,17 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         }
 
         // Set layout for recyclerView
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7) {
+            @Override
+            public boolean canScrollVertically() {
+                return false; // chặn cuộn dọc
+            }
+
+            @Override
+            public boolean canScrollHorizontally() {
+                return false; // chặn cuộn ngang
+            }
+        };
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
     }
@@ -293,32 +278,44 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         createTransactionHistoryTitle();
     }
 
-    @Override
-    public void onItemClick(int position, String dayText, View view) {
+    private void borderSelectedDate(int position, Boolean enableBorder) {
 
         ConstraintLayout cell_layout;
         TextView cellDayText;
+
+        // Clear last selected date border
+        RecyclerView.ViewHolder viewHolder = calendarRecyclerView.findViewHolderForAdapterPosition(position);
+        if (viewHolder != null) {
+
+            View itemView = viewHolder.itemView;
+            if (enableBorder) {
+
+                cell_layout = itemView.findViewById(R.id.calendar_cell_layout);
+                cell_layout.setBackgroundResource(R.drawable.calendar_cell_border);
+                cellDayText = itemView.findViewById(R.id.cellDayText);
+                cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.pink));
+            } else {
+
+                cell_layout = itemView.findViewById(R.id.calendar_cell_layout);
+                cell_layout.setBackground(null);
+                cellDayText = itemView.findViewById(R.id.cellDayText);
+                cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+            }
+        }
+    }
+
+    @Override
+    public void onItemClick(int position, String dayText, View view) {
 
         if (!dayText.isEmpty()) {
             if (previousSelectedPosition != position) {
 
                 // Clear last selected date border
-                RecyclerView.ViewHolder viewHolder = calendarRecyclerView.findViewHolderForAdapterPosition(previousSelectedPosition);
-                if (viewHolder != null) {
-
-                    View itemView = viewHolder.itemView;
-                    cell_layout = itemView.findViewById(R.id.calendar_cell_layout);
-                    cell_layout.setBackground(null);
-                    cellDayText = itemView.findViewById(R.id.cellDayText);
-                    cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
-                }
+                borderSelectedDate(previousSelectedPosition, false);
             }
 
             selectedDate = selectedDate.withDayOfMonth(Integer.valueOf(dayText));
-            cell_layout = view.findViewById(R.id.calendar_cell_layout);
-            cell_layout.setBackgroundResource(R.drawable.calendar_cell_border);
-            cellDayText = view.findViewById(R.id.cellDayText);
-            cellDayText.setTextColor(ContextCompat.getColor(requireContext(), R.color.pink));
+            borderSelectedDate(position, true);
 
             // display Transaction history
             getDataTransactionList();

@@ -220,6 +220,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public int transactionTotalAmountByDate(LocalDate date) {
+
+        int totalAmount = 0;
+
+        String query = "SELECT " + "COALESCE(SUM(amount), 0) AS totalAmount" +
+                " FROM " + TABLE_TRANSACTION +
+                " WHERE transaction_dt LIKE ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+
+            cursor = db.rawQuery(query, new String[]{String.valueOf(date)});
+        }
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            totalAmount = cursor.getInt(0);
+        }
+
+        return totalAmount;
+    }
+
     public Cursor transactionFindByDate(LocalDate date) {
         String query = "SELECT " + "id, amount, note, category_id, transaction_dt, source_id, ins_dttm, upd_dttm" +
                 " FROM " + TABLE_TRANSACTION +
